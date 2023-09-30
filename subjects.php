@@ -1,6 +1,6 @@
 <?php require_once './assets/header.php'; ?>
 <main>
-<div class="container-fluid">
+  <div class="container-fluid">
     <button class="float-end btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-sub-modal">Add subject</button>
     <br><br>
 
