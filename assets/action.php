@@ -251,12 +251,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'addSchedule') {
     return;
   }
 
-  echo $sched_ay;
-  echo $sched_sem;
-  echo json_encode($sched_days);
-  echo $start_time;
-  echo $end_time;
-  echo $sched_sub;
-  echo $sched_room;
-  echo $sched_fac;
+  $qrcode = '';
+
+  echo $query->addSchedules($sched_ay, $sched_sem, $sched_days, $start_time, $end_time, $sched_sub, $sched_room, $sched_fac, $qrcode);
 }

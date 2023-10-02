@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 30, 2023 at 02:40 PM
+-- Generation Time: Oct 02, 2023 at 02:31 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -113,6 +113,7 @@ CREATE TABLE `schedule` (
   `sch_id` int(11) NOT NULL,
   `school_year_from` varchar(10) NOT NULL,
   `school_year_to` varchar(10) NOT NULL,
+  `sem` varchar(50) NOT NULL,
   `sch_time_from` time NOT NULL,
   `sch_time_to` time NOT NULL,
   `day` varchar(30) NOT NULL,
@@ -126,8 +127,8 @@ CREATE TABLE `schedule` (
 -- Dumping data for table `schedule`
 --
 
-INSERT INTO `schedule` (`sch_id`, `school_year_from`, `school_year_to`, `sch_time_from`, `sch_time_to`, `day`, `ro_id`, `sub_id`, `fac_id`, `qrcode`) VALUES
-(1, '', '', '00:00:00', '00:00:00', '', 15, 4, 31, '');
+INSERT INTO `schedule` (`sch_id`, `school_year_from`, `school_year_to`, `sem`, `sch_time_from`, `sch_time_to`, `day`, `ro_id`, `sub_id`, `fac_id`, `qrcode`) VALUES
+(1, '', '', '', '00:00:00', '00:00:00', '', 15, 4, 31, '');
 
 -- --------------------------------------------------------
 

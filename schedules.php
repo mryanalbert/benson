@@ -47,7 +47,7 @@
                     <option value="saturday">Saturday</option>
                   </select>
                   
-                  <div class="row mb-2">
+                  <div class="row my-2">
                     <div class="col-6">
                       <label class="form-label">Start time:</label>
                       <input type="time" class="form-control" name="start-time" id="start-time" required>

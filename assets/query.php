@@ -305,4 +305,24 @@ class Query extends Database {
     $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
     return $result;
   }
+
+  // Add schedules
+  public function addSchedules($sched_ay, $sched_sem, $sched_days, $start_time, $end_time, $sched_sub, $sched_room, $sched_fac, $qrcode) {
+    $sql = "INSERT INTO schedule (school_year_from, school_year_to, sem, sch_time_from, sch_time_to, `day`, ro_id, sub_id, fac_id, qrcode)
+            VALUES (:school_year_from, :school_year_to, :sem, :sch_time_from, :sch_time_to, :sch_day, :ro_id, :sub_id, :fac_id, :qrcode)";
+    $stmt = $this->conn->prepare($sql);
+    $stmt->execute([
+      'school_year_from' => $sched_ay,
+      'school_year_to' => number_format($sched_ay) + 1,
+      'sem' => $sched_sem,
+      'sch_day' => $sched_days,
+      'sch_time_from' => $start_time,
+      'sch_time_to' => $end_time,
+      'sub_id' => $sched_sub,
+      'ro_id' => $sched_room,
+      'fac_id' => $sched_fac,
+      'qrcode' => $qrcode
+    ]);
+    return true;
+  } 
 }
