@@ -223,3 +223,15 @@ if (isset($_POST['action']) && $_POST['action'] == 'updateSubject') {
   $desc = $query->testInput($_POST['edit-sub-desc']);
   echo $query->updateSubject($id, $code, $title, $desc);
 }
+
+// Add Schedule
+if (isset($_POST['action']) && $_POST['action'] == 'addSchedule') {
+  $start_time = $query->testInput($_POST['start-time']);
+  $end_time = $query->testInput($_POST['end-time']);
+
+  if ($start_time >= $end_time) {
+    echo 'Starting time is greater than or equal to ending time.';
+  } else {
+    echo 'Ending time is greater than Starting time';
+  }
+}
