@@ -226,13 +226,37 @@ if (isset($_POST['action']) && $_POST['action'] == 'updateSubject') {
 
 // Add Schedule
 if (isset($_POST['action']) && $_POST['action'] == 'addSchedule') {
+
+  $sched_ay = $query->testInput($_POST['sched-ay']);
+  $sched_sem = $query->testInput($_POST['sched-sem']);
+
+  $sched_days = '';
+  if (isset($_POST['sched-days'])) {
+    $sched_days = $_POST['sched-days'];
+  }
+
   $start_time = $query->testInput($_POST['start-time']);
   $end_time = $query->testInput($_POST['end-time']);
+  $sched_sub = $query->testInput($_POST['sched-sub']);
+  $sched_room = $query->testInput($_POST['sched-room']);
+  $sched_fac = $query->testInput($_POST['sched-fac']);
 
   if ($start_time >= $end_time) {
     echo 'time error';
     return;
   }
 
-  
+  if (empty($sched_ay) || empty($sched_sem) || empty($sched_days) || empty($start_time) || empty($end_time) || empty($sched_sub) || empty($sched_room) || empty($sched_fac)) {
+    echo 'empty';
+    return;
+  }
+
+  echo $sched_ay;
+  echo $sched_sem;
+  echo json_encode($sched_days);
+  echo $start_time;
+  echo $end_time;
+  echo $sched_sub;
+  echo $sched_room;
+  echo $sched_fac;
 }

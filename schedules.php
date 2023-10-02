@@ -258,11 +258,23 @@
         $.ajax({
           url: 'assets/action.php',
           method: 'post',
-          data: $('#add-sched-form').serialize() + '&action=addSchedule',
+          data: {
+            'sched-ay': $('#sched-ay').val(),
+            'sched-sem': $('#sched-sem').val(),
+            'sched-days': $('#sched-days') ? $('#sched-days').val() : $('#sched-days').val(3),
+            'start-time': $('#start-time').val(),
+            'end-time': $('#end-time').val(),
+            'sched-sub': $('#sched-sub').val(),
+            'sched-room': $('#sched-room').val(),
+            'sched-fac': $('#sched-fac').val(),
+            'action': 'addSchedule'
+          },
           success: function(res) {
             console.log(res)
             if (res == 'time error') {
               swal('error', 'Time Error!', "Start time can't be greater or equal to end time.")
+            } else if (res == 'empty') {
+              swal('error', 'Empty field(s)!', "Fill in the empty fields.")
             }
             $('#add-sched-btn').attr('disabled', false)
             $('#add-sched-btn').val('Add schedule')
