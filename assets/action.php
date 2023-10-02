@@ -231,7 +231,5 @@ if (isset($_POST['action']) && $_POST['action'] == 'addSchedule') {
 
   if ($start_time >= $end_time) {
     echo 'Starting time is greater than or equal to ending time.';
-  } else {
-    echo 'Ending time is greater than Starting time';
   }
 }
