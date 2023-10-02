@@ -170,6 +170,13 @@
 <script>
   $(document).ready(function() {
     $('#add-sched-modal').modal('show')
+    function swal(icon, title, text) {
+      Swal.fire({
+        icon: icon,
+        title: title,
+        text: text,
+      })
+    }
 
     function fetchSubjects() {
       $.ajax({
@@ -254,6 +261,9 @@
           data: $('#add-sched-form').serialize() + '&action=addSchedule',
           success: function(res) {
             console.log(res)
+            if (res == 'time error') {
+              swal('error', 'Time Error!', "Start time can't be greater or equal to end time.")
+            }
             $('#add-sched-btn').attr('disabled', false)
             $('#add-sched-btn').val('Add schedule')
           }

@@ -230,6 +230,9 @@ if (isset($_POST['action']) && $_POST['action'] == 'addSchedule') {
   $end_time = $query->testInput($_POST['end-time']);
 
   if ($start_time >= $end_time) {
-    echo 'Starting time is greater than or equal to ending time.';
+    echo 'time error';
+    return;
   }
+
+  
 }
