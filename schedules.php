@@ -1,8 +1,17 @@
 <?php require_once './assets/header.php'; ?>
 <main>
   <div class="container-fluid">
-    <button class="float-end btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-sched-modal">Add schedule</button>
-    <br><br>
+    <div class="d-flex justify-content-between mb-3">
+      <div class="d-flex">
+        <select name="ac-year-filter" id="ac-year-filter" class="form-select" style="width:170px;"></select>
+
+        <select name="sem-filter" id="sem-filter" class="form-select ms-2" style="width:150px;"></select>
+
+        <button class="btn btn-secondary ms-2">Filter</button>
+      </div>
+
+      <button class="float-end btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-sched-modal">Add schedule</button>
+    </div>
 
     <!-- Add Schedule Modal -->
     <div class="modal fade" id="add-sched-modal" data-bs-backdrop="static" data-bs-keyboard="false">
@@ -200,7 +209,7 @@
 <?php require_once './assets/footer.php'; ?>
 <script>
   $(document).ready(function() {
-    $('#add-sched-modal').modal('show')
+    // $('#add-sched-modal').modal('show')
     function swal(icon, title, text) {
       Swal.fire({
         icon: icon,
@@ -279,6 +288,165 @@
     }
     fetchFaculties()
 
+    function fetchYearsFrom() {
+      $.ajax({
+        url: 'assets/action.php',
+        method: 'post',
+        data: { action: 'fetchYearsFrom' },
+        success: function(res) {
+          res = JSON.parse(res)
+          let yearsFrom = res.map(year => {
+            return `<option value="${year.school_year_from}">
+              A.Y. ${year.school_year_from}-${year.school_year_from + 1}
+            </option>`
+          })
+          yearsFrom = yearsFrom.join('')
+          $('#ac-year-filter').html(yearsFrom)
+          fetchSems()
+        }
+      })
+    }
+    fetchYearsFrom()
+    
+    function fetchSems() {
+      $.ajax({
+        url: 'assets/action.php',
+        method: 'post',
+        data: { action: 'fetchSems' },
+        success: function(res) {
+          res = JSON.parse(res)
+          let sems = res.map(sem => {
+            return `<option value="${sem.sem}">Sem ${sem.sem}</option>`
+          })
+          sems = sems.join('')
+          $('#sem-filter').html(sems)
+          fetchCurrent()
+        }
+      })
+    }
+
+    function fetchCurrent() {
+      $.ajax({
+        url: 'assets/action.php',
+        method: 'post',
+        data: { action: 'fetchCurrent' },
+        success: function(res) {
+          res = JSON.parse(res)
+          $('#ac-year-filter').val(res.cur_ay_from)
+          $('#sem-filter').val(res.cur_sem)
+          fetchSchedules()
+        }
+      })
+    }
+
+    function fetchSchedules() {
+      $.ajax({
+        url: 'assets/action.php',
+        method: 'post',
+        data: { 
+          ac_year_from: $('#ac-year-filter').val(),
+          sem: $('#sem-filter').val(),
+          action: 'fetchSchedules' 
+        },
+        success: function(res) {
+          res = JSON.parse(res)
+          console.log(res)
+          if (res.length > 0) {
+            let output = ''
+
+            output += `
+              <table class="table table-striped table-bordered w-100" id="room-table">
+                <thead>
+                  <tr>
+                    <th>Academic Year</th>
+                    <th>Semester</th>
+                    <th>Day</th>
+                    <th>Time start</th>
+                    <th>Time end</th>
+                    <th>Room</th>
+                    <th>Subject</th>
+                    <th>Instructor</th>
+                    <th>Actions</th>
+                  </tr>
+                  <tr>
+                    <td>Academic Year</td>
+                    <td>Semester</td>
+                    <td>Day</td>
+                    <td>Time start</td>
+                    <td>Time end</td>
+                    <td>Room</td>
+                    <td>Subject</td>
+                    <td>Instructor</td>
+                    <td class="d-none">Actions</td>
+                  </tr>
+                </thead>
+                <tbody>
+            `
+
+            res.forEach(sched => {
+              output += `
+                <tr>
+                  <td>${sched.school_year_from}-${sched.school_year_to}</td>
+                  <td>${sched.sem}</td>
+                  <td>${sched.day}</td>
+                  <td>${sched.sch_time_from}</td>
+                  <td>${sched.sch_time_to}</td>
+                  <td>${sched.room}</td>
+                  <td>${sched.sub_title} (${sched.sub_code})</td>
+                  <td>${sched.fac_fname} ${sched.fac_lname}</td>
+                  <td>
+                    <a href="#" title="Details" class="view-room-modal text-decoration-none" id="view-room-${sched.ro_id}" data-bs-toggle="modal" data-bs-target="#view-room-modal">
+                      <i class="bi bi-info-circle-fill fs-5 text-info"></i>
+                    </a>
+                    <a href="#" title="Edit" class="edit-room-modal text-decoration-none" id="edit-room-${sched.ro_id}" data-bs-toggle="modal" data-bs-target="#edit-room-modal">
+                      <i class="bi bi-pencil-square fs-5 text-warning"></i>
+                    </a>
+                    <a href="#" title="Delete" class="del-room-modal" id="del-room-${sched.ro_id}">
+                      <i class="bi bi-trash-fill fs-5 text-danger"></i>
+                    </a>
+                  </td>
+                </tr>
+              `
+            })
+            
+            output += `
+                </tbody>
+              </table
+            `
+            $("#data-wrapper").html(output)
+
+            // Setup - add a text input to each footer cell
+            $('#room-table thead td').each(function() {
+              let title = $(this).text()
+              $(this).html(`<input type="text" placeholder="Search ${title}" class="form-control form-control-sm w-100" />`)
+            })
+
+            // DataTable
+            let table = $('#room-table').DataTable({
+              initComplete: function() {
+                // Apply the search
+                this.api().columns().every(function() {
+                  let that = this
+                  
+                  $('input', this.header()).on('keyup change clear', function() {
+                    if (that.search() !== this.value) {
+                      that
+                        .search(this.value)
+                        .draw()
+                    }
+                  })
+                })
+              }
+            })
+          } else {
+            $("#data-wrapper").html(`
+              <h4 class="text-center text-secondary fst-italic">No Rooms.</h4>
+            `)
+          }
+        }
+      })
+    }
+
     $('#add-sched-btn').click(function(e) {
       if ($('#add-sched-form')[0].checkValidity()) {
         e.preventDefault()
@@ -306,6 +474,9 @@
             } else if (res == 'empty') {
               swal('error', 'Empty field(s)!', "Fill in the empty fields.")
             } else if (res == 1) {
+              fetchSchedules()
+              $('#add-sched-modal').modal('hide')
+              $('#add-sched-form')[0].reset()
               swal('success', 'Added!', "Schedule successfully added.")
             } else {
               res = JSON.parse(res)

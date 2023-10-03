@@ -292,7 +292,7 @@ class Query extends Database {
   }
 
   // Fetch schedules
-  public function fetchSchedules() {
+  public function fetchSchedules($ac_year_from, $ac_year_to, $sem) {
     $sql = "SELECT * FROM schedule
             INNER JOIN faculty
               ON schedule.fac_id = faculty.fac_id
@@ -301,9 +301,16 @@ class Query extends Database {
             INNER JOIN room
               ON schedule.ro_id = room.ro_id
             INNER JOIN subject
-              ON schedule.sub_id = subject.sub_id";
+              ON schedule.sub_id = subject.sub_id
+            WHERE school_year_from = :school_year_from
+              AND school_year_to = :school_year_to
+              AND sem = :sem";
     $stmt = $this->conn->prepare($sql);
-    $stmt->execute();
+    $stmt->execute([
+      'school_year_from' => $ac_year_from,
+      'school_year_to' => $ac_year_to,
+      'sem' => $sem
+    ]);
     $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
     return $result;
   }
@@ -362,5 +369,32 @@ class Query extends Database {
       }
     }
     return $scheds;
+  }
+
+  // Fetch unique school year from
+  public function fetchSchoolYearsFrom() {
+    $sql = "SELECT DISTINCT school_year_from FROM schedule ORDER BY school_year_from DESC";
+    $stmt = $this->conn->prepare($sql);
+    $stmt->execute();
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    return $result;
+  }
+  
+  // Fetch unique school semester
+  public function fetchSchoolSems() {
+    $sql = "SELECT DISTINCT sem FROM schedule ORDER BY sem ASC";
+    $stmt = $this->conn->prepare($sql);
+    $stmt->execute();
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    return $result;
+  }
+
+  // Fetch unique school semester
+  public function fetchCurrents() {
+    $sql = "SELECT * FROM current";
+    $stmt = $this->conn->prepare($sql);
+    $stmt->execute();
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    return $row;
   }
 }

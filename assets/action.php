@@ -309,3 +309,34 @@ if (isset($_POST['action']) && $_POST['action'] == 'addSchedule') {
   } 
 
 }
+
+// Fetch School Years From
+if (isset($_POST['action']) && $_POST['action'] == 'fetchYearsFrom') {
+  echo json_encode($query->fetchSchoolYearsFrom());
+}
+
+// Fetch Semesters
+if (isset($_POST['action']) && $_POST['action'] == 'fetchSems') {
+  echo json_encode($query->fetchSchoolSems());
+}
+
+// Fetch Currents
+if (isset($_POST['action']) && $_POST['action'] == 'fetchCurrent') {
+  echo json_encode($query->fetchCurrents());
+}
+
+// Fetch Schedules
+if (isset($_POST['action']) && $_POST['action'] == 'fetchSchedules') {
+  $ac_year_from = $query->testInput($_POST['ac_year_from']);
+  $sem = $query->testInput($_POST['sem']);
+  $schedules =  $query->fetchSchedules($ac_year_from, $ac_year_from + 1, $sem);
+
+  $data = [];
+  foreach ($schedules as $schedule) {
+    $schedule['sch_time_from'] = date("h:ia", strtotime($schedule['sch_time_from']));
+    $schedule['sch_time_to'] = date("h:ia", strtotime($schedule['sch_time_to']));
+    array_push($data, $schedule);
+  }
+
+  echo json_encode($data);
+}
