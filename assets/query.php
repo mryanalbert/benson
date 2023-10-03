@@ -13,9 +13,9 @@ class Query extends Database {
   }
 
   // Add Faculty
-  public function addFaculty($fname, $mname, $lname, $dep, $gen, $img) {
-    $sql = "INSERT INTO faculty (fac_fname, fac_mname, fac_lname, fac_img, dep_id, gender) 
-            VALUES (:fname, :mname, :lname, :img, :dep_id, :gender)";
+  public function addFaculty($fname, $mname, $lname, $dep, $gen, $img, $qrcode, $qrcode_img) {
+    $sql = "INSERT INTO faculty (fac_fname, fac_mname, fac_lname, fac_img, dep_id, gender, qrcode, qrcode_img) 
+            VALUES (:fname, :mname, :lname, :img, :dep_id, :gender, :qrcode, :qrcode_img)";
     $stmt = $this->conn->prepare($sql);
     $stmt->execute([
       'fname' => $fname,
@@ -23,7 +23,9 @@ class Query extends Database {
       'lname' => $lname,
       'img' => $img,
       'dep_id' => $dep,
-      'gender' => $gen
+      'gender' => $gen,
+      'qrcode' => $qrcode,
+      'qrcode_img' => $qrcode_img
     ]);
     return true;
   }
@@ -307,22 +309,58 @@ class Query extends Database {
   }
 
   // Add schedules
-  public function addSchedules($sched_ay, $sched_sem, $sched_days, $start_time, $end_time, $sched_sub, $sched_room, $sched_fac, $qrcode) {
-    $sql = "INSERT INTO schedule (school_year_from, school_year_to, sem, sch_time_from, sch_time_to, `day`, ro_id, sub_id, fac_id, qrcode)
-            VALUES (:school_year_from, :school_year_to, :sem, :sch_time_from, :sch_time_to, :sch_day, :ro_id, :sub_id, :fac_id, :qrcode)";
-    $stmt = $this->conn->prepare($sql);
-    $stmt->execute([
-      'school_year_from' => $sched_ay,
-      'school_year_to' => number_format($sched_ay) + 1,
-      'sem' => $sched_sem,
-      'sch_day' => $sched_days,
-      'sch_time_from' => $start_time,
-      'sch_time_to' => $end_time,
-      'sub_id' => $sched_sub,
-      'ro_id' => $sched_room,
-      'fac_id' => $sched_fac,
-      'qrcode' => $qrcode
-    ]);
+  public function addSchedules($sched_ay, $sched_sem, $sched_days, $start_time, $end_time, $sched_sub, $sched_room, $sched_fac) {
+    foreach ($sched_days as $day) {
+      $sql = "INSERT INTO schedule (school_year_from, school_year_to, sem, sch_time_from, sch_time_to, `day`, ro_id, sub_id, fac_id)
+              VALUES (:school_year_from, :school_year_to, :sem, :sch_time_from, :sch_time_to, :sch_day, :ro_id, :sub_id, :fac_id)";
+      $stmt = $this->conn->prepare($sql);
+      $stmt->execute([
+        'school_year_from' => $sched_ay,
+        'school_year_to' => $sched_ay + 1,
+        'sem' => $sched_sem,
+        'sch_day' => $day,
+        'sch_time_from' => $start_time,
+        'sch_time_to' => $end_time,
+        'sub_id' => $sched_sub,
+        'ro_id' => $sched_room,
+        'fac_id' => $sched_fac
+      ]);
+    }
     return true;
   } 
+
+  // Check conflict schedules
+  public function conflictSchedules($sched_ay, $sched_sem, $sched_days, $sched_room) {
+    $scheds = [];
+    foreach ($sched_days as $day) {
+      $sql = "SELECT * FROM schedule
+              INNER JOIN room
+                ON schedule.ro_id = room.ro_id
+              INNER JOIN `subject`
+                ON schedule.sub_id = `subject`.sub_id
+              INNER JOIN faculty
+                ON schedule.fac_id = faculty.fac_id
+              INNER JOIN department
+                ON faculty.dep_id = department.dep_id
+              WHERE school_year_from = :school_year_from
+                AND school_year_to = :school_year_to
+                AND sem = :sem
+                AND `day` = :sch_day
+                AND schedule.ro_id = :ro_id";
+      $stmt = $this->conn->prepare($sql);
+      $stmt->execute([
+        'school_year_from' => $sched_ay,
+        'school_year_to' => $sched_ay + 1,
+        'sem' => $sched_sem,
+        'sch_day' => $day,
+        'ro_id' => $sched_room
+      ]);
+      $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+      foreach ($result as $row) {
+        array_push($scheds, $row);
+      }
+    }
+    return $scheds;
+  }
 }

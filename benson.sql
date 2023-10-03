@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 02, 2023 at 02:31 PM
+-- Generation Time: Oct 02, 2023 at 06:27 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -58,7 +58,8 @@ CREATE TABLE `department` (
 
 INSERT INTO `department` (`dep_id`, `dep_name`, `dep_desc`) VALUES
 (10, 'CIT', 'College of Information Technology'),
-(11, 'COB', 'College of Business');
+(11, 'COB', 'College of Business'),
+(14, 'BSTM', 'Bachelor of Science');
 
 -- --------------------------------------------------------
 
@@ -82,7 +83,8 @@ CREATE TABLE `faculty` (
 
 INSERT INTO `faculty` (`fac_id`, `fac_fname`, `fac_mname`, `fac_lname`, `fac_img`, `dep_id`, `gender`) VALUES
 (29, 'Ryan Albert', 'Sulapas', 'Masungsong', '', 10, 1),
-(31, 'Carol', '', 'Villamor', 'tampus.jpg', 11, 0);
+(31, 'Carol', '', 'Villamor', 'tampus.jpg', 11, 0),
+(33, 'Pj', 'C', 'Anong', 'WIN_20230529_15_01_33_Pro.jpg', 14, 1);
 
 -- --------------------------------------------------------
 
@@ -101,7 +103,8 @@ CREATE TABLE `room` (
 --
 
 INSERT INTO `room` (`ro_id`, `room`, `bldg`) VALUES
-(15, 'df', 'df');
+(15, 'df', 'df'),
+(17, 'comlab', 'maria');
 
 -- --------------------------------------------------------
 
@@ -114,21 +117,21 @@ CREATE TABLE `schedule` (
   `school_year_from` varchar(10) NOT NULL,
   `school_year_to` varchar(10) NOT NULL,
   `sem` varchar(50) NOT NULL,
-  `sch_time_from` time NOT NULL,
-  `sch_time_to` time NOT NULL,
+  `sch_time_from` text NOT NULL,
+  `sch_time_to` text NOT NULL,
   `day` varchar(30) NOT NULL,
   `ro_id` int(11) NOT NULL,
   `sub_id` int(11) NOT NULL,
-  `fac_id` int(11) NOT NULL,
-  `qrcode` text NOT NULL
+  `fac_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `schedule`
 --
 
-INSERT INTO `schedule` (`sch_id`, `school_year_from`, `school_year_to`, `sem`, `sch_time_from`, `sch_time_to`, `day`, `ro_id`, `sub_id`, `fac_id`, `qrcode`) VALUES
-(1, '', '', '', '00:00:00', '00:00:00', '', 15, 4, 31, '');
+INSERT INTO `schedule` (`sch_id`, `school_year_from`, `school_year_to`, `sem`, `sch_time_from`, `sch_time_to`, `day`, `ro_id`, `sub_id`, `fac_id`) VALUES
+(4, '2024', '2024', '2', '00:00', '00:01', 'tuesday', 17, 4, 29),
+(5, '2024', '2024', '2', '00:20', '00:21', 'sunday', 17, 4, 29);
 
 -- --------------------------------------------------------
 
@@ -148,7 +151,8 @@ CREATE TABLE `subject` (
 --
 
 INSERT INTO `subject` (`sub_id`, `sub_code`, `sub_title`, `sub_desc`) VALUES
-(4, '2313000', 'DIT112', 'Computer Programming 1');
+(4, '2313000', 'DIT112', 'Computer Programming 1'),
+(6, '231404', 'ITP112', 'Data Structures and Algorithms');
 
 --
 -- Indexes for dumped tables
@@ -204,31 +208,31 @@ ALTER TABLE `admin`
 -- AUTO_INCREMENT for table `department`
 --
 ALTER TABLE `department`
-  MODIFY `dep_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `dep_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `faculty`
 --
 ALTER TABLE `faculty`
-  MODIFY `fac_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+  MODIFY `fac_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
 -- AUTO_INCREMENT for table `room`
 --
 ALTER TABLE `room`
-  MODIFY `ro_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `ro_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `schedule`
 --
 ALTER TABLE `schedule`
-  MODIFY `sch_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `sch_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `subject`
 --
 ALTER TABLE `subject`
-  MODIFY `sub_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `sub_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

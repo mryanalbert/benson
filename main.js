@@ -1,0 +1,26 @@
+[
+  {
+    sch_id: 41,
+    school_year_from: 2023,
+    school_year_to: 2024,
+    sem: "2",
+    sch_time_from: "14:31:00",
+    sch_time_to: "16:00:00",
+    day: "monday",
+    ro_id: 17,
+    sub_id: 4,
+    fac_id: 29,
+  },
+  {
+    sch_id: 42,
+    school_year_from: 2023,
+    school_year_to: 2024,
+    sem: "2",
+    sch_time_from: "14:31:00",
+    sch_time_to: "16:00:00",
+    day: "thursday",
+    ro_id: 17,
+    sub_id: 4,
+    fac_id: 29,
+  },
+];

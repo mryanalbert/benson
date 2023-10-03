@@ -230,6 +230,9 @@
                     <a href="#" title="Delete" class="del-faculty-modal text-decoration-none" id="del-faculty-${faculty.fac_id}">
                       <i class="bi bi-trash-fill fs-5 text-danger"></i>
                     </a>
+                    <a href="#" title="Print QR Code" class="print-qr-faculty text-decoration-none" id="print-qr-faculty-${faculty.fac_id}">
+                      <i class="bi bi-printer-fill fs-5"></i>
+                    </a>
                   </td>
                 </tr>
               `
@@ -314,7 +317,7 @@
           cache: false,
           data: data,
           success: function(res) {
-            if (res) {
+            if (res == 1) {
               fetchFaculties()
               $('#add-faculty-modal').modal('hide')
               swal('success', 'Successfully added!', '')

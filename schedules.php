@@ -38,13 +38,13 @@
 
                   <label class="form-label">Days:</label>
                   <select name="sched-days[]" multiple id="sched-days" class="form-select mb-2">
-                    <option value="sunday">Sunday</option>
-                    <option value="monday">Monday</option>
-                    <option value="tuesday">Tuesday</option>
-                    <option value="wednesday">Wednesday</option>
-                    <option value="thursday">Thursday</option>
-                    <option value="friday">Friday</option>
-                    <option value="saturday">Saturday</option>
+                    <option value="Sunday">Sunday</option>
+                    <option value="Monday">Monday</option>
+                    <option value="Tuesday">Tuesday</option>
+                    <option value="Wednesday">Wednesday</option>
+                    <option value="Thursday">Thursday</option>
+                    <option value="Friday">Friday</option>
+                    <option value="Saturday">Saturday</option>
                   </select>
                   
                   <div class="row my-2">
@@ -143,6 +143,37 @@
                 </div>
               </div>
             </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Conflict Schedules Modal -->
+    <div class="modal fade" id="conflict-sched-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-fullscreen">
+        <div class="modal-content">
+          <div class="modal-header bg-danger text-white">
+            <h1 class="modal-title fs-5">Conflict Schedules</h1>
+            <button type="button" class="btn-close bg-light" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body table-responsive">
+            <table class="table table-striped table-bordered table-responsive">
+              <thead>
+                <tr>
+                  <th>Academic Year</th>
+                  <th>Semester</th>
+                  <th>Day</th>
+                  <th>Time</th>
+                  <th>Room</th>
+                  <th>Subject</th>
+                  <th>Instructor</th>
+                </tr>
+              </thead>
+              <tbody id="modal-conflict-body">
+                <tr>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
@@ -270,11 +301,29 @@
             'action': 'addSchedule'
           },
           success: function(res) {
-            console.log(res)
             if (res == 'time error') {
               swal('error', 'Time Error!', "Start time can't be greater or equal to end time.")
             } else if (res == 'empty') {
               swal('error', 'Empty field(s)!', "Fill in the empty fields.")
+            } else if (res == 1) {
+              swal('success', 'Added!', "Schedule successfully added.")
+            } else {
+              res = JSON.parse(res)
+              console.log(res)
+              let conflicts = res.map(con => {
+                return `<tr>
+                  <td>${con.school_year_from}-${con.school_year_to}</td>
+                  <td>${con.sem}</td>
+                  <td>${con.day}</td>
+                  <td>${con.sch_time_from} - ${con.sch_time_to}</td>
+                  <td>${con.room} - ${con.bldg} bldg</td>
+                  <td>${con.sub_title} ${con.sub_desc} (${con.sub_code})</td>
+                  <td>${con.fac_fname} ${con.fac_lname}</td>
+                </tr>`
+              })
+              conflicts = conflicts.join('')
+              $('#modal-conflict-body').html(conflicts)
+              $('#conflict-sched-modal').modal('show')
             }
             $('#add-sched-btn').attr('disabled', false)
             $('#add-sched-btn').val('Add schedule')

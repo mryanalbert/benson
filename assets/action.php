@@ -1,5 +1,17 @@
 <?php
 session_start();
+
+require '../vendor/autoload.php';
+use Endroid\QrCode\Color\Color;
+use Endroid\QrCode\Encoding\Encoding;
+use Endroid\QrCode\ErrorCorrectionLevel\ErrorCorrectionLevelLow;
+use Endroid\QrCode\QrCode;
+use Endroid\QrCode\Label\Label;
+use Endroid\QrCode\Logo\Logo;
+use Endroid\QrCode\RoundBlockSizeMode\RoundBlockSizeModeMargin;
+use Endroid\QrCode\Writer\PngWriter;
+use Endroid\QrCode\Writer\ValidationException;
+
 require_once './query.php';
 $query = new Query();
 
@@ -30,11 +42,31 @@ if (isset($_POST['action']) && $_POST['action'] == 'addFaculty') {
   $img = $_FILES['img'];
   $imgName = $_FILES['img']['name'];
 
+  $uniqid = uniqid();
+
+  $writer = new PngWriter();
+
+  $qrcode = QrCode::create($uniqid)
+    ->setEncoding(new Encoding('UTF-8'))
+    ->setErrorCorrectionLevel(new ErrorCorrectionLevelLow())
+    ->setSize(300)
+    ->setMargin(10)
+    ->setRoundBlockSizeMode(new RoundBlockSizeModeMargin())
+    ->setForegroundColor(new Color(0, 0, 0))
+    ->setBackgroundColor(new Color(255, 255, 255));
+
+  $result = $writer->write($qrcode);
+
+  header('Content-Type: '.$result->getMimeType());
+  $qrcode_img = time() . '.png';
+  // Save it to a file
+  $result->saveToFile(__DIR__."/img/". $qrcode_img);
+
   if (isset($imgName) && $imgName) {
     move_uploaded_file($img['tmp_name'], "./uploads/img/{$imgName}");
-    echo $query->addFaculty($fname, $mname, $lname, $dep, $gen, $imgName);
+    echo $query->addFaculty($fname, $mname, $lname, $dep, $gen, $imgName, $uniqid, $qrcode_img);
   } else {
-    echo $query->addFaculty($fname, $mname, $lname, $dep, $gen, "");
+    echo $query->addFaculty($fname, $mname, $lname, $dep, $gen, "", $uniqid, $qrcode_img);
   }
 }
 
@@ -251,7 +283,29 @@ if (isset($_POST['action']) && $_POST['action'] == 'addSchedule') {
     return;
   }
 
-  $qrcode = '';
+  $schedsWithoutTime = $query->conflictSchedules($sched_ay, $sched_sem, $sched_days, $sched_room);
 
-  echo $query->addSchedules($sched_ay, $sched_sem, $sched_days, $start_time, $end_time, $sched_sub, $sched_room, $sched_fac, $qrcode);
+  $conflictTimes = [];
+  foreach ($schedsWithoutTime as $schedWithoutTime) {
+    if (strtotime($start_time) >= strtotime($schedWithoutTime['sch_time_from'])) {
+      if (strtotime($start_time) < strtotime($schedWithoutTime['sch_time_to'])) {
+        $schedWithoutTime['sch_time_from'] = date("h:ia", strtotime($schedWithoutTime['sch_time_from']));
+        $schedWithoutTime['sch_time_to'] = date("h:ia", strtotime($schedWithoutTime['sch_time_to']));
+        array_push($conflictTimes, $schedWithoutTime);
+      }
+    } 
+    // else if (strtotime($start_time) < strtotime($schedWithoutTime['sch_time_from']) && strtotime($schedWithoutTime['sch_time_from']) >= strtotime($end_time)) {
+    //   continue;
+    // }
+    else if (strtotime($start_time) < strtotime($schedWithoutTime['sch_time_from']) && strtotime($schedWithoutTime['sch_time_from']) < strtotime($end_time)) {
+      array_push($conflictTimes, $schedWithoutTime);
+    }
+  }
+
+  if (sizeof($conflictTimes) > 0) {
+    echo json_encode($conflictTimes);
+  } else {
+    echo $query->addSchedules($sched_ay, $sched_sem, $sched_days, $start_time, $end_time, $sched_sub, $sched_room, $sched_fac);
+  } 
+
 }
