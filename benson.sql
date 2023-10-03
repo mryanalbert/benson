@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 02, 2023 at 06:27 PM
+-- Generation Time: Oct 03, 2023 at 02:36 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -43,6 +43,26 @@ INSERT INTO `admin` (`id`, `username`, `password`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `current`
+--
+
+CREATE TABLE `current` (
+  `id` int(11) NOT NULL,
+  `cur_ay_from` int(11) NOT NULL,
+  `cur_ay_to` int(11) NOT NULL,
+  `cur_sem` varchar(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `current`
+--
+
+INSERT INTO `current` (`id`, `cur_ay_from`, `cur_ay_to`, `cur_sem`) VALUES
+(1, 2023, 2024, '2');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `department`
 --
 
@@ -74,17 +94,18 @@ CREATE TABLE `faculty` (
   `fac_lname` varchar(100) NOT NULL,
   `fac_img` text NOT NULL,
   `dep_id` int(11) NOT NULL,
-  `gender` int(2) NOT NULL
+  `gender` int(2) NOT NULL,
+  `qrcode` text NOT NULL,
+  `qrcode_img` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `faculty`
 --
 
-INSERT INTO `faculty` (`fac_id`, `fac_fname`, `fac_mname`, `fac_lname`, `fac_img`, `dep_id`, `gender`) VALUES
-(29, 'Ryan Albert', 'Sulapas', 'Masungsong', '', 10, 1),
-(31, 'Carol', '', 'Villamor', 'tampus.jpg', 11, 0),
-(33, 'Pj', 'C', 'Anong', 'WIN_20230529_15_01_33_Pro.jpg', 14, 1);
+INSERT INTO `faculty` (`fac_id`, `fac_fname`, `fac_mname`, `fac_lname`, `fac_img`, `dep_id`, `gender`, `qrcode`, `qrcode_img`) VALUES
+(29, 'Ryan Albert', 'Sulapas', 'Masungsong', '', 10, 1, '', ''),
+(31, 'Carol', '', 'Villamor', 'tampus.jpg', 11, 0, '', '');
 
 -- --------------------------------------------------------
 
@@ -114,8 +135,8 @@ INSERT INTO `room` (`ro_id`, `room`, `bldg`) VALUES
 
 CREATE TABLE `schedule` (
   `sch_id` int(11) NOT NULL,
-  `school_year_from` varchar(10) NOT NULL,
-  `school_year_to` varchar(10) NOT NULL,
+  `school_year_from` int(6) NOT NULL,
+  `school_year_to` int(6) NOT NULL,
   `sem` varchar(50) NOT NULL,
   `sch_time_from` text NOT NULL,
   `sch_time_to` text NOT NULL,
@@ -130,8 +151,16 @@ CREATE TABLE `schedule` (
 --
 
 INSERT INTO `schedule` (`sch_id`, `school_year_from`, `school_year_to`, `sem`, `sch_time_from`, `sch_time_to`, `day`, `ro_id`, `sub_id`, `fac_id`) VALUES
-(4, '2024', '2024', '2', '00:00', '00:01', 'tuesday', 17, 4, 29),
-(5, '2024', '2024', '2', '00:20', '00:21', 'sunday', 17, 4, 29);
+(53, 2023, 2024, '2', '14:00', '15:30', 'Monday', 17, 6, 29),
+(54, 2023, 2024, '2', '14:00', '15:30', 'Thursday', 17, 6, 29),
+(55, 2023, 2024, '2', '12:30', '14:00', 'Monday', 17, 6, 29),
+(56, 2023, 2024, '2', '12:30', '14:00', 'Thursday', 17, 6, 29),
+(57, 2023, 2024, '2', '11:00', '12:30', 'Monday', 17, 6, 31),
+(58, 2023, 2024, '2', '11:00', '12:30', 'Thursday', 17, 6, 31),
+(59, 2023, 2024, '2', '08:30', '10:00', 'Tuesday', 15, 6, 31),
+(60, 2023, 2024, '2', '08:30', '10:00', 'Tuesday', 17, 6, 31),
+(61, 2023, 2024, '2', '09:00', '10:00', 'Friday', 15, 4, 31),
+(62, 2023, 2024, '2', '08:30', '10:00', 'Wednesday', 15, 6, 29);
 
 -- --------------------------------------------------------
 
@@ -162,6 +191,12 @@ INSERT INTO `subject` (`sub_id`, `sub_code`, `sub_title`, `sub_desc`) VALUES
 -- Indexes for table `admin`
 --
 ALTER TABLE `admin`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `current`
+--
+ALTER TABLE `current`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -205,6 +240,12 @@ ALTER TABLE `admin`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
+-- AUTO_INCREMENT for table `current`
+--
+ALTER TABLE `current`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT for table `department`
 --
 ALTER TABLE `department`
@@ -214,7 +255,7 @@ ALTER TABLE `department`
 -- AUTO_INCREMENT for table `faculty`
 --
 ALTER TABLE `faculty`
-  MODIFY `fac_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+  MODIFY `fac_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 
 --
 -- AUTO_INCREMENT for table `room`
@@ -226,7 +267,7 @@ ALTER TABLE `room`
 -- AUTO_INCREMENT for table `schedule`
 --
 ALTER TABLE `schedule`
-  MODIFY `sch_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `sch_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=63;
 
 --
 -- AUTO_INCREMENT for table `subject`
