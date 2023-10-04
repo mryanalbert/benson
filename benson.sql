@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 03, 2023 at 02:36 PM
+-- Generation Time: Oct 04, 2023 at 03:24 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -105,7 +105,9 @@ CREATE TABLE `faculty` (
 
 INSERT INTO `faculty` (`fac_id`, `fac_fname`, `fac_mname`, `fac_lname`, `fac_img`, `dep_id`, `gender`, `qrcode`, `qrcode_img`) VALUES
 (29, 'Ryan Albert', 'Sulapas', 'Masungsong', '', 10, 1, '', ''),
-(31, 'Carol', '', 'Villamor', 'tampus.jpg', 11, 0, '', '');
+(31, 'Carol', '', 'Villamor', 'tampus.jpg', 11, 0, '', ''),
+(36, 'Fermin', 'Cabug-os', 'Perez', '', 14, 1, '651ce228a3529', '1696391720.png'),
+(37, 'Aries', 'Deqiut', 'Escosura', 'IMG_4785.jpeg', 14, 1, '651d63b8811a1', '1696424888.png');
 
 -- --------------------------------------------------------
 
@@ -151,8 +153,6 @@ CREATE TABLE `schedule` (
 --
 
 INSERT INTO `schedule` (`sch_id`, `school_year_from`, `school_year_to`, `sem`, `sch_time_from`, `sch_time_to`, `day`, `ro_id`, `sub_id`, `fac_id`) VALUES
-(53, 2023, 2024, '2', '14:00', '15:30', 'Monday', 17, 6, 29),
-(54, 2023, 2024, '2', '14:00', '15:30', 'Thursday', 17, 6, 29),
 (55, 2023, 2024, '2', '12:30', '14:00', 'Monday', 17, 6, 29),
 (56, 2023, 2024, '2', '12:30', '14:00', 'Thursday', 17, 6, 29),
 (57, 2023, 2024, '2', '11:00', '12:30', 'Monday', 17, 6, 31),
@@ -160,7 +160,12 @@ INSERT INTO `schedule` (`sch_id`, `school_year_from`, `school_year_to`, `sem`, `
 (59, 2023, 2024, '2', '08:30', '10:00', 'Tuesday', 15, 6, 31),
 (60, 2023, 2024, '2', '08:30', '10:00', 'Tuesday', 17, 6, 31),
 (61, 2023, 2024, '2', '09:00', '10:00', 'Friday', 15, 4, 31),
-(62, 2023, 2024, '2', '08:30', '10:00', 'Wednesday', 15, 6, 29);
+(62, 2023, 2024, '2', '08:30', '10:00', 'Wednesday', 15, 6, 29),
+(63, 2023, 2024, '1', '13:00', '15:00', 'Wednesday', 15, 6, 31),
+(64, 2023, 2024, '1', '13:00', '15:00', 'Saturday', 15, 6, 31),
+(65, 2023, 2024, 'summer', '07:00', '08:00', 'Monday', 15, 4, 29),
+(68, 2023, 2024, '2', '06:00', '06:30', 'Monday', 17, 6, 36),
+(69, 2024, 2025, '1', '05:00', '05:30', 'Sunday', 15, 4, 29);
 
 -- --------------------------------------------------------
 
@@ -255,7 +260,7 @@ ALTER TABLE `department`
 -- AUTO_INCREMENT for table `faculty`
 --
 ALTER TABLE `faculty`
-  MODIFY `fac_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
+  MODIFY `fac_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
 
 --
 -- AUTO_INCREMENT for table `room`
@@ -267,7 +272,7 @@ ALTER TABLE `room`
 -- AUTO_INCREMENT for table `schedule`
 --
 ALTER TABLE `schedule`
-  MODIFY `sch_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=63;
+  MODIFY `sch_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=70;
 
 --
 -- AUTO_INCREMENT for table `subject`
