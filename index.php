@@ -7,19 +7,29 @@
   <title>Faculty Attendance</title>
 </head>
 <body>
-  <video id="preview"></video>
+  <h1 class="text-center mt-3">Scan QR CODE</h1>
 
-  <div class="form-check">
-    <input type="radio" name="options" id="fcam" value="1" checked>
-    <label class="form-check-label" for="fcam">Front Camera</label>
-  </div>
-  <div class="form-check">
-    <input type="radio" name="options" id="bcam" value="2">
-    <label class="form-check-label" for="bcam">Back Camera</label>
+  <div class="container">
+    <div class="row mt-3">
+      <div class="col-md-8">
+        <video id="preview" class="w-100"></video>
+      </div>
+      <div class="col-md-4">
+        <label for="">QR Code value:</label>
+        <input type="text" name="qrcode" id="qrcode" class="form-control w-100 mt-2" style="width: 200px;" readonly>
+        <br>
+        <div>
+          <input type="radio" name="options" id="fcam" value="1" checked>
+          <label class="form-check-label" for="fcam">Front Camera</label>
+        </div>
+        <div>
+          <input type="radio" name="options" id="bcam" value="2">
+          <label class="form-check-label" for="bcam">Back Camera</label>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <label for="">QR Code value:</label>
-  <input type="text" name="qrcode" id="qrcode" class="form-control" style="width: 200px;" readonly>
 
   <script src="./admin/libs/bootstrap.bundle.js"></script>
   <script src="./admin/libs/jquery.min.js"></script>
