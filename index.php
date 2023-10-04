@@ -7,10 +7,10 @@
   <title>Faculty Attendance</title>
 </head>
 <body>
-  <h1 class="text-center mt-3">Scan QR CODE</h1>
+  <h1 class="text-center mt-4">Scan QR CODE</h1>
 
   <div class="container">
-    <div class="row mt-3">
+    <div class="row mt-4">
       <div class="col-md-8">
         <video id="preview" class="w-100"></video>
       </div>
