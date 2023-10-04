@@ -340,3 +340,90 @@ if (isset($_POST['action']) && $_POST['action'] == 'fetchSchedules') {
 
   echo json_encode($data);
 }
+
+// Filter Schedules
+if (isset($_POST['action']) && $_POST['action'] == 'filterSchedules') {
+  $ac_year_from = $query->testInput($_POST['acyear']);
+  $ac_year_to = $ac_year_from + 1;
+  $sem = $query->testInput($_POST['sem']);
+  echo json_encode($query->fetchSchedules($ac_year_from, $ac_year_to, $sem));
+}
+
+// View Schedule
+if (isset($_POST['action']) && $_POST['action'] == 'view-sched') {
+  $id = $query->testInput($_POST['id']);
+  $schedule = $query->fetchSchedule($id);
+
+  $schedule['sch_time_from'] = date("h:ia", strtotime($schedule['sch_time_from']));
+  $schedule['sch_time_to'] = date("h:ia", strtotime($schedule['sch_time_to']));
+
+  echo json_encode($schedule);
+}
+
+// Edit Schedule
+if (isset($_POST['action']) && $_POST['action'] == 'edit-sched') {
+  $id = $query->testInput($_POST['id']);
+  $schedule = $query->fetchSchedule($id);
+
+  echo json_encode($schedule);
+}
+
+// Delete Schedule
+if (isset($_POST['action']) && $_POST['action'] == 'del-sched') {
+  $id = $query->testInput($_POST['id']);
+  echo $query->delSchedule($id);
+}
+
+// Update Schedule
+if (isset($_POST['action']) && $_POST['action'] == 'updateSchedule') {
+  $id = $query->testInput($_POST['edit-sched-id']);
+  $sched_ay = $query->testInput($_POST['edit-sched-ay']);
+  $sched_sem = $query->testInput($_POST['edit-sched-sem']);
+
+  $sched_days = '';
+  if (isset($_POST['edit-sched-days'])) {
+    $sched_days = $_POST['edit-sched-days'];
+  }
+
+  $start_time = $query->testInput($_POST['edit-start-time']);
+  $end_time = $query->testInput($_POST['edit-end-time']);
+  $sched_sub = $query->testInput($_POST['edit-sched-sub']);
+  $sched_room = $query->testInput($_POST['edit-sched-room']);
+  $sched_fac = $query->testInput($_POST['edit-sched-fac']);
+
+  if ($start_time >= $end_time) {
+    echo 'time error';
+    return;
+  }
+
+  if (empty($sched_ay) || empty($sched_sem) || empty($sched_days) || empty($start_time) || empty($end_time) || empty($sched_sub) || empty($sched_room) || empty($sched_fac)) {
+    echo 'empty';
+    return;
+  }
+
+  $schedsWithoutTime = $query->conflictSchedules($sched_ay, $sched_sem, $sched_days, $sched_room);
+
+  $conflictTimes = [];
+  foreach ($schedsWithoutTime as $schedWithoutTime) {
+    if (strtotime($start_time) >= strtotime($schedWithoutTime['edit-sch_time_from'])) {
+      if (strtotime($start_time) < strtotime($schedWithoutTime['edit-sch_time_to'])) {
+        $schedWithoutTime['edit-sch_time_from'] = date("h:ia", strtotime($schedWithoutTime['edit-sch_time_from']));
+        $schedWithoutTime['edit-sch_time_to'] = date("h:ia", strtotime($schedWithoutTime['edit-sch_time_to']));
+        array_push($conflictTimes, $schedWithoutTime);
+      }
+    } 
+    // else if (strtotime($start_time) < strtotime($schedWithoutTime['sch_time_from']) && strtotime($schedWithoutTime['sch_time_from']) >= strtotime($end_time)) {
+    //   continue;
+    // }
+    else if (strtotime($start_time) < strtotime($schedWithoutTime['edit-sch_time_from']) && strtotime($schedWithoutTime['edit-sch_time_from']) < strtotime($end_time)) {
+      array_push($conflictTimes, $schedWithoutTime);
+    }
+  }
+
+  if (sizeof($conflictTimes) > 0) {
+    echo json_encode($conflictTimes);
+  } else {
+    // echo $query->updateSchedule($id, $sched_ay, $sched_sem, $sched_days, $start_time, $end_time, $sched_sub, $sched_room, $sched_fac);
+  } 
+
+}

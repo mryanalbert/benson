@@ -397,4 +397,50 @@ class Query extends Database {
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
     return $row;
   }
+
+  // Fetch a schedule
+  public function fetchSchedule($id) {
+    $sql = "SELECT * FROM schedule
+            INNER JOIN faculty
+              ON schedule.fac_id = faculty.fac_id
+            INNER JOIN department
+              ON faculty.dep_id = department.dep_id
+            INNER JOIN room
+              ON schedule.ro_id = room.ro_id
+            INNER JOIN subject
+              ON schedule.sub_id = subject.sub_id
+            WHERE sch_id = :sch_id";
+    $stmt = $this->conn->prepare($sql);
+    $stmt->execute(['sch_id' => $id]);
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    return $result;
+  }
+
+  // Delete a schedule
+  public function delSchedule($id) {
+    $sql = "DELETE FROM schedule WHERE sch_id = :sch_id";
+    $stmt = $this->conn->prepare($sql);
+    $stmt->execute(['sch_id' => $id]);
+    return true;
+  }
+
+  // Update schedules
+  // public function updateSchedule($id, $sched_ay, $sched_sem, $sched_days, $start_time, $end_time, $sched_sub, $sched_room, $sched_fac) {
+  //   $sql = "UPDATE schedule
+  //           SET ";
+  //   $stmt = $this->conn->prepare($sql);
+  //   $stmt->execute([
+  //     'sch_id' => $id,
+  //     'school_year_from' => $sched_ay,
+  //     'school_year_to' => $sched_ay + 1,
+  //     'sem' => $sched_sem,
+  //     'sch_day' => $day,
+  //     'sch_time_from' => $start_time,
+  //     'sch_time_to' => $end_time,
+  //     'sub_id' => $sched_sub,
+  //     'ro_id' => $sched_room,
+  //     'fac_id' => $sched_fac
+  //   ]);
+  //   return true;
+  // } 
 }
