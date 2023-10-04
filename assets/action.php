@@ -376,7 +376,6 @@ if (isset($_POST['action']) && $_POST['action'] == 'del-sched') {
 
 // Update Schedule
 if (isset($_POST['action']) && $_POST['action'] == 'updateSchedule') {
-  print_r($_POST);
   $id = $query->testInput($_POST['edit-sched-id']);
   $sched_ay = $query->testInput($_POST['edit-sched-ay']);
   $sched_sem = $query->testInput($_POST['edit-sched-sem']);
@@ -397,7 +396,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'updateSchedule') {
     return;
   }
 
-  if (empty($sched_ay) || empty($sched_sem) || empty($sched_days) || empty($start_time) || empty($end_time) || empty($sched_sub) || empty($sched_room) || empty($sched_fac)) {
+  if (empty($sched_ay) || empty($sched_sem) || sizeof($sched_days) < 1 || empty($start_time) || empty($end_time) || empty($sched_sub) || empty($sched_room) || empty($sched_fac)) {
     echo 'empty';
     return;
   }
@@ -406,17 +405,17 @@ if (isset($_POST['action']) && $_POST['action'] == 'updateSchedule') {
 
   $conflictTimes = [];
   foreach ($schedsWithoutTime as $schedWithoutTime) {
-    if (strtotime($start_time) >= strtotime($schedWithoutTime['edit-sch_time_from'])) {
-      if (strtotime($start_time) < strtotime($schedWithoutTime['edit-sch_time_to'])) {
-        $schedWithoutTime['edit-sch_time_from'] = date("h:ia", strtotime($schedWithoutTime['edit-sch_time_from']));
-        $schedWithoutTime['edit-sch_time_to'] = date("h:ia", strtotime($schedWithoutTime['edit-sch_time_to']));
+    if (strtotime($start_time) >= strtotime($schedWithoutTime['sch_time_from'])) {
+      if (strtotime($start_time) < strtotime($schedWithoutTime['sch_time_to'])) {
+        $schedWithoutTime['sch_time_from'] = date("h:ia", strtotime($schedWithoutTime['sch_time_from']));
+        $schedWithoutTime['sch_time_to'] = date("h:ia", strtotime($schedWithoutTime['sch_time_to']));
         array_push($conflictTimes, $schedWithoutTime);
       }
     } 
     // else if (strtotime($start_time) < strtotime($schedWithoutTime['sch_time_from']) && strtotime($schedWithoutTime['sch_time_from']) >= strtotime($end_time)) {
     //   continue;
     // }
-    else if (strtotime($start_time) < strtotime($schedWithoutTime['edit-sch_time_from']) && strtotime($schedWithoutTime['edit-sch_time_from']) < strtotime($end_time)) {
+    else if (strtotime($start_time) < strtotime($schedWithoutTime['sch_time_from']) && strtotime($schedWithoutTime['sch_time_from']) < strtotime($end_time)) {
       array_push($conflictTimes, $schedWithoutTime);
     }
   }
@@ -424,7 +423,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'updateSchedule') {
   if (sizeof($conflictTimes) > 0) {
     echo json_encode($conflictTimes);
   } else {
-    echo $query->updateSchedule($id, $sched_ay, $sched_sem, $sched_days[0], $start_time, $end_time, $sched_sub, $sched_room, $sched_fac);
+    echo $query->updateSchedule($id, $sched_ay, $sched_sem, $sched_days, $start_time, $end_time, $sched_sub, $sched_room, $sched_fac);
   } 
 
 }

@@ -707,32 +707,32 @@
           },
           success: function(res) {
             console.log(res)
-            // if (res == 'time error') {
-            //   swal('error', 'Time Error!', "Start time can't be greater or equal to end time.")
-            // } else if (res == 'empty') {
-            //   swal('error', 'Empty field(s)!', "Fill in the empty fields.")
-            // } else if (res == 1) {
-            //   fetchYearsFrom()
-            //   $('#edit-sched-modal').modal('hide')
-            //   $('#edit-sched-form')[0].reset()
-            //   swal('success', 'Updated!', "Schedule successfully updated.")
-            // } else {
-            //   res = JSON.parse(res)
-            //   let conflicts = res.map(con => {
-            //     return `<tr>
-            //       <td>${con.school_year_from}-${con.school_year_to}</td>
-            //       <td>${con.sem}</td>
-            //       <td>${con.day}</td>
-            //       <td>${con.sch_time_from} - ${con.sch_time_to}</td>
-            //       <td>${con.room} - ${con.bldg} bldg</td>
-            //       <td>${con.sub_title} ${con.sub_desc} (${con.sub_code})</td>
-            //       <td>${con.fac_fname} ${con.fac_lname}</td>
-            //     </tr>`
-            //   })
-            //   conflicts = conflicts.join('')
-            //   $('#modal-conflict-body').html(conflicts)
-            //   $('#conflict-sched-modal').modal('show')
-            // }
+            if (res == 'time error') {
+              swal('error', 'Time Error!', "Start time can't be greater or equal to end time.")
+            } else if (res == 'empty') {
+              swal('error', 'Empty field(s)!', "Fill in the empty fields.")
+            } else if (res == 1) {
+              fetchYearsFrom()
+              $('#edit-sched-modal').modal('hide')
+              $('#edit-sched-form')[0].reset()
+              swal('success', 'Updated!', "Schedule successfully updated.")
+            } else {
+              res = JSON.parse(res)
+              let conflicts = res.map(con => {
+                return `<tr>
+                  <td>${con.school_year_from}-${con.school_year_to}</td>
+                  <td>${con.sem}</td>
+                  <td>${con.day}</td>
+                  <td>${con.sch_time_from} - ${con.sch_time_to}</td>
+                  <td>${con.room} - ${con.bldg} bldg</td>
+                  <td>${con.sub_title} ${con.sub_desc} (${con.sub_code})</td>
+                  <td>${con.fac_fname} ${con.fac_lname}</td>
+                </tr>`
+              })
+              conflicts = conflicts.join('')
+              $('#modal-conflict-body').html(conflicts)
+              $('#conflict-sched-modal').modal('show')
+            }
             $('#update-sched-btn').attr('disabled', false)
             $('#update-sched-btn').val('Update schedule')
           }
