@@ -425,22 +425,31 @@ class Query extends Database {
   }
 
   // Update schedules
-  // public function updateSchedule($id, $sched_ay, $sched_sem, $sched_days, $start_time, $end_time, $sched_sub, $sched_room, $sched_fac) {
-  //   $sql = "UPDATE schedule
-  //           SET ";
-  //   $stmt = $this->conn->prepare($sql);
-  //   $stmt->execute([
-  //     'sch_id' => $id,
-  //     'school_year_from' => $sched_ay,
-  //     'school_year_to' => $sched_ay + 1,
-  //     'sem' => $sched_sem,
-  //     'sch_day' => $day,
-  //     'sch_time_from' => $start_time,
-  //     'sch_time_to' => $end_time,
-  //     'sub_id' => $sched_sub,
-  //     'ro_id' => $sched_room,
-  //     'fac_id' => $sched_fac
-  //   ]);
-  //   return true;
-  // } 
+  public function updateSchedule($id, $sched_ay, $sched_sem, $sched_day, $start_time, $end_time, $sched_sub, $sched_room, $sched_fac) {
+    $sql = "UPDATE schedule
+            SET school_year_from = :school_yearfrom,
+              school_year_to = :school_year_to,
+              sem = :sem,
+              `day` = :sch_day
+              sch_time_from = :sch_time_from
+              sch_time_to = :sch_time_to
+              sub_id = :sub_id,
+              ro_id = :ro_id,
+              fac_id = :fac_id
+            WHERE sch_id = :sch_id";
+    $stmt = $this->conn->prepare($sql);
+    $stmt->execute([
+      'sch_id' => $id,
+      'school_year_from' => $sched_ay,
+      'school_year_to' => $sched_ay + 1,
+      'sem' => $sched_sem,
+      'sch_day' => $sched_day,
+      'sch_time_from' => $start_time,
+      'sch_time_to' => $end_time,
+      'sub_id' => $sched_sub,
+      'ro_id' => $sched_room,
+      'fac_id' => $sched_fac
+    ]);
+    return true;
+  } 
 }

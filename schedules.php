@@ -298,9 +298,7 @@
             $('#sched-sub').prepend(`<option value="" selected disabled class="d-none">--Select Subject--</option>`)
             
             $('#edit-sched-sub').html(subjects)
-            $('#edit-sched-sub').prepend(`<option value="" selected disabled class="d-none">--Select Subject--</option>`)
             dselect(document.querySelector('#sched-sub'), { search: true })
-            dselect(document.querySelector('#edit-sched-sub'), { search: true })
           } else {
             $('#sched-sub').html(`<option>No subjects.</option>`)
             $('#edit-sched-sub').html(`<option>No subjects.</option>`)
@@ -328,7 +326,6 @@
             $('#edit-sched-room').html(rooms)
             $('#edit-sched-room').prepend(`<option value="" selected disabled class="d-none">--Select Room--</option>`)
             dselect(document.querySelector('#sched-room'), { search: true })
-            dselect(document.querySelector('#edit-sched-room'), { search: true })
           } else {
             $('#edit-sched-room').html(`<option>No rooms.</option>`)
             $('#sched-room').html(`<option>No rooms.</option>`)
@@ -357,7 +354,6 @@
             
             $('#edit-sched-fac').html(faculties)
             $('#edit-sched-fac').prepend(`<option value="" selected disabled class="d-none">--Select Room--</option>`)
-            dselect(document.querySelector('#edit-sched-fac'), { search: true })
           } else {
             $('#sched-fac').html(`<option>No faculties.</option>`)
             $('#edit-sched-fac').html(`<option>No faculties.</option>`)
@@ -638,17 +634,6 @@
         },
         success: function(res) {
           res = JSON.parse(res)
-          console.log(res)
-          let img = 'assets/img/avatar man.jpg'
-
-          if (res.fac_img) {
-            img = `assets/uploads/img/${res.fac_img}`
-          } else {
-            if (res.gender == 0) {
-              img = 'assets/img/avatar woman.jpg'
-            }
-          }
-
           $('#edit-sched-id').val(res.sch_id)
           $('#edit-sched-ay').val(res.school_year_from)
           $('#edit-sched-sem').val(res.sem)
@@ -656,8 +641,8 @@
           $('#edit-start-time').val(res.sch_time_from)
           $('#edit-end-time').val(res.sch_time_to)
           $('#edit-sched-sub').val(res.sub_id)
-          $('#edit-sched-room').val(res.sch_time_to)
-          $('#edit-sched-fac').val(res.sch_time_to)
+          $('#edit-sched-room').val(res.ro_id)
+          $('#edit-sched-fac').val(res.fac_id)
         }
       })
     })
@@ -703,15 +688,16 @@
         e.preventDefault()
 
         $(this).attr('disabled', true)
-        $(this).val('Adding schedule...')
+        $(this).val('Updating schedule...')
 
         $.ajax({
           url: 'assets/action.php',
           method: 'post',
           data: {
+            'edit-sched-id': $('#edit-sched-id').val(),
             'edit-sched-ay': $('#edit-sched-ay').val(),
             'edit-sched-sem': $('#edit-sched-sem').val(),
-            'edit-sched-days': $('#edit-sched-days') ? $('#sched-days').val() : '',
+            'edit-sched-days': $('#edit-sched-day') ? [$('#edit-sched-day').val()] : '',
             'edit-start-time': $('#edit-start-time').val(),
             'edit-end-time': $('#edit-end-time').val(),
             'edit-sched-sub': $('#edit-sched-sub').val(),
@@ -720,32 +706,33 @@
             'action': 'updateSchedule'
           },
           success: function(res) {
-            if (res == 'time error') {
-              swal('error', 'Time Error!', "Start time can't be greater or equal to end time.")
-            } else if (res == 'empty') {
-              swal('error', 'Empty field(s)!', "Fill in the empty fields.")
-            } else if (res == 1) {
-              fetchYearsFrom()
-              $('#edit-sched-modal').modal('hide')
-              $('#edit-sched-form')[0].reset()
-              swal('success', 'Updated!', "Schedule successfully updated.")
-            } else {
-              res = JSON.parse(res)
-              let conflicts = res.map(con => {
-                return `<tr>
-                  <td>${con.school_year_from}-${con.school_year_to}</td>
-                  <td>${con.sem}</td>
-                  <td>${con.day}</td>
-                  <td>${con.sch_time_from} - ${con.sch_time_to}</td>
-                  <td>${con.room} - ${con.bldg} bldg</td>
-                  <td>${con.sub_title} ${con.sub_desc} (${con.sub_code})</td>
-                  <td>${con.fac_fname} ${con.fac_lname}</td>
-                </tr>`
-              })
-              conflicts = conflicts.join('')
-              $('#modal-conflict-body').html(conflicts)
-              $('#conflict-sched-modal').modal('show')
-            }
+            console.log(res)
+            // if (res == 'time error') {
+            //   swal('error', 'Time Error!', "Start time can't be greater or equal to end time.")
+            // } else if (res == 'empty') {
+            //   swal('error', 'Empty field(s)!', "Fill in the empty fields.")
+            // } else if (res == 1) {
+            //   fetchYearsFrom()
+            //   $('#edit-sched-modal').modal('hide')
+            //   $('#edit-sched-form')[0].reset()
+            //   swal('success', 'Updated!', "Schedule successfully updated.")
+            // } else {
+            //   res = JSON.parse(res)
+            //   let conflicts = res.map(con => {
+            //     return `<tr>
+            //       <td>${con.school_year_from}-${con.school_year_to}</td>
+            //       <td>${con.sem}</td>
+            //       <td>${con.day}</td>
+            //       <td>${con.sch_time_from} - ${con.sch_time_to}</td>
+            //       <td>${con.room} - ${con.bldg} bldg</td>
+            //       <td>${con.sub_title} ${con.sub_desc} (${con.sub_code})</td>
+            //       <td>${con.fac_fname} ${con.fac_lname}</td>
+            //     </tr>`
+            //   })
+            //   conflicts = conflicts.join('')
+            //   $('#modal-conflict-body').html(conflicts)
+            //   $('#conflict-sched-modal').modal('show')
+            // }
             $('#update-sched-btn').attr('disabled', false)
             $('#update-sched-btn').val('Update schedule')
           }

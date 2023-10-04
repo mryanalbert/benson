@@ -376,6 +376,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'del-sched') {
 
 // Update Schedule
 if (isset($_POST['action']) && $_POST['action'] == 'updateSchedule') {
+  print_r($_POST);
   $id = $query->testInput($_POST['edit-sched-id']);
   $sched_ay = $query->testInput($_POST['edit-sched-ay']);
   $sched_sem = $query->testInput($_POST['edit-sched-sem']);
@@ -423,7 +424,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'updateSchedule') {
   if (sizeof($conflictTimes) > 0) {
     echo json_encode($conflictTimes);
   } else {
-    // echo $query->updateSchedule($id, $sched_ay, $sched_sem, $sched_days, $start_time, $end_time, $sched_sub, $sched_room, $sched_fac);
+    echo $query->updateSchedule($id, $sched_ay, $sched_sem, $sched_days[0], $start_time, $end_time, $sched_sub, $sched_room, $sched_fac);
   } 
 
 }
