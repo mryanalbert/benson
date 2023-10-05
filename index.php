@@ -87,7 +87,7 @@
         scanner.addListener('scan',function(content){
           $('#qrcode').val(content)
           $('#validating-modal').modal('show')
-
+          console.log(new Date())
           $.ajax({
             url: './admin/assets/action.php',
             method: 'post',

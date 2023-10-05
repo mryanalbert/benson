@@ -15,11 +15,6 @@ use Endroid\QrCode\Writer\ValidationException;
 require_once './query.php';
 $query = new Query();
 
-// Attendance
-if (isset($_POST['action']) && $_POST['action'] == 'attendance') {
-  print_r($_POST);
-}
-
 // Login Ajax Request
 if (isset($_POST['action']) && $_POST['action'] == 'login') {
   $username = $query->testInput($_POST['username']);
@@ -441,3 +436,8 @@ if (isset($_POST['action']) && $_POST['action'] == 'updateCurrent') {
   echo $query->updateCurrent($id, $cur_year, $cur_sem);
 }
 
+// Attendance
+if (isset($_POST['action']) && $_POST['action'] == 'attendance') {
+  $time = date('l jS \of F Y h:i:s A');
+  echo $time;
+}
