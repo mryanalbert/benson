@@ -438,6 +438,40 @@ if (isset($_POST['action']) && $_POST['action'] == 'updateCurrent') {
 
 // Attendance
 if (isset($_POST['action']) && $_POST['action'] == 'attendance') {
-  $time = date('l jS \of F Y h:i:s A');
-  echo $time;
+  date_default_timezone_set('Asia/Manila');
+  $yearFrom = $_POST['yearFrom'];
+  $yearTo = $_POST['yearTo'];
+  $sem = $_POST['sem'];
+  $qrcode = $_POST['qrcode'];
+  $time = date('H:i');
+  // echo date("l jS \of F Y h:i");
+  $schedules = $query->fetchScheduleForAtt($yearFrom, $yearTo, $sem, $qrcode);
+
+  $scheduleMatched = 0;
+  $schedTime = '';
+  $notScheduleNotify = '';
+
+  if (sizeof($schedules) > 0) {
+    foreach ($schedules as $sched) {
+      $prefix = $sched['gender'] == 1 ? 'Sir' : "Ma'am";
+
+      if (strtotime($sched['sch_time_from']) <= strtotime($time) && strtotime($time) <= strtotime($sched['sch_time_to'])) {
+        $scheduleMatched++;
+        $schedTime = $sched;
+      } else {
+        $notScheduleNotify = "Not your schedule {$prefix} {$sched['fac_fname']}";
+      }
+    }
+  } else {
+    echo 'QR Code not registered.';
+    return;
+  }
+
+  if ($scheduleMatched > 0) {
+    echo json_encode($schedTime);
+    return;
+  } else {
+    echo $notScheduleNotify;
+    return;
+  }
 }

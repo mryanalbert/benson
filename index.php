@@ -39,13 +39,8 @@
 
   <div class="container">
     <div class="row mt-4">
-      <div class="col-md-8">
+      <div class="col-md-12">
         <video id="preview" class="w-100"></video>
-      </div>
-      <div class="col-md-4">
-        <input type="hidden" name="cur-ay" id="cur-ay">
-        <input type="hidden" name="cur-to" id="cur-to">
-        <input type="hidden" name="cur-sem" id="cur-sem">
         <!-- <label for="">QR Code value:</label> -->
         <input type="hidden" name="qrcode" id="qrcode" class="form-control w-100 mt-2" style="width: 200px;">
         <br>
@@ -64,7 +59,7 @@
 
   <script src="./admin/libs/bootstrap.bundle.js"></script>
   <script src="./admin/libs/jquery.min.js"></script>
-  <script src="https://rawgit.com/schmich/instascan-builds/master/instascan.min.js"></script>
+  <script src="./admin/libs/rawgit_instascan.min.js"></script>
   <script>
     $(document).ready(function() {
       $('#loading-modal').modal('show')
@@ -87,7 +82,6 @@
         scanner.addListener('scan',function(content){
           $('#qrcode').val(content)
           $('#validating-modal').modal('show')
-          console.log(new Date())
           $.ajax({
             url: './admin/assets/action.php',
             method: 'post',

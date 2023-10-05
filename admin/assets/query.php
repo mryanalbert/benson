@@ -469,4 +469,30 @@ class Query extends Database {
     ]);
     return true;
   }
+
+  // Fetch schedule for attendance
+  public function fetchScheduleForAtt($yearFrom, $yearTo, $sem, $qrcode) {
+    $sql = "SELECT * FROM schedule
+            INNER JOIN faculty
+              ON schedule.fac_id = faculty.fac_id
+            INNER JOIN department
+              ON faculty.dep_id = department.dep_id
+            INNER JOIN room
+              ON schedule.ro_id = room.ro_id
+            INNER JOIN `subject`
+              ON schedule.sub_id = subject.sub_id
+            WHERE school_year_from = :school_year_from
+              AND school_year_to = :school_year_to
+              AND sem = :sem
+              AND qrcode = :qrcode";
+    $stmt = $this->conn->prepare($sql);
+    $stmt->execute([
+      'school_year_from' => $yearFrom,
+      'school_year_to' => $yearTo,
+      'sem' => $sem,
+      'qrcode' => $qrcode
+    ]);
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    return $result;
+  }
 }
