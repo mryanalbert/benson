@@ -452,4 +452,21 @@ class Query extends Database {
     ]);
     return true;
   } 
+
+  // Update current
+  public function updateCurrent($id, $cur_year, $cur_sem) {
+    $sql = "UPDATE current
+            SET cur_ay_from = :cur_ay_from,
+              cur_ay_to = :cur_ay_to,
+              cur_sem = :cur_sem
+            WHERE id = :id";
+    $stmt = $this->conn->prepare($sql);
+    $stmt->execute([
+      'cur_ay_from' => $cur_year,
+      'cur_ay_to' => $cur_year + 1,
+      'cur_sem' => $cur_sem,
+      'id' => $id
+    ]);
+    return true;
+  }
 }

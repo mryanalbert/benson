@@ -427,3 +427,11 @@ if (isset($_POST['action']) && $_POST['action'] == 'updateSchedule') {
   } 
 
 }
+
+// Update Current
+if (isset($_POST['action']) && $_POST['action'] == 'updateCurrent') {
+  $id = $query->testInput($_POST['cur-id']);
+  $cur_year = $query->testInput($_POST['cur-ay']);
+  $cur_sem = $query->testInput($_POST['cur-sem']);
+  echo $query->updateCurrent($id, $cur_year, $cur_sem);
+}
