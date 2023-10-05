@@ -131,8 +131,6 @@
           console.error(e);
           alert(e);
         });
-
-
       }
       fetchCurrent()
 
