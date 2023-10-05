@@ -443,21 +443,22 @@ if (isset($_POST['action']) && $_POST['action'] == 'attendance') {
   $yearTo = $_POST['yearTo'];
   $sem = $_POST['sem'];
   $qrcode = $_POST['qrcode'];
+  $day = date('l');
   $time = date('H:i');
   // echo date("l jS \of F Y h:i");
   $schedules = $query->fetchScheduleForAtt($yearFrom, $yearTo, $sem, $qrcode);
 
   $scheduleMatched = 0;
-  $schedTime = '';
+  $schedTime = [];
   $notScheduleNotify = '';
 
   if (sizeof($schedules) > 0) {
     foreach ($schedules as $sched) {
       $prefix = $sched['gender'] == 1 ? 'Sir' : "Ma'am";
 
-      if (strtotime($sched['sch_time_from']) <= strtotime($time) && strtotime($time) <= strtotime($sched['sch_time_to'])) {
+      if (strtotime($sched['sch_time_from']) <= strtotime($time) && strtotime($time) <= strtotime($sched['sch_time_to']) && $day == $sched['day']) {
         $scheduleMatched++;
-        $schedTime = $sched;
+        array_push($schedTime, $sched);
       } else {
         $notScheduleNotify = "Not your schedule {$prefix} {$sched['fac_fname']}";
       }

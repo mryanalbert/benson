@@ -73,7 +73,6 @@
           body: new URLSearchParams({ action: 'fetchCurrent' })
         })
         current = await reqCurYearsOrSems.json()
-        console.log(current)
 
         var scanner = new Instascan.Scanner({ video: document.getElementById('preview'), scanPeriod: 5, mirror: false });
         
