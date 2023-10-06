@@ -445,7 +445,6 @@ if (isset($_POST['action']) && $_POST['action'] == 'attendance') {
   $qrcode = $_POST['qrcode'];
   $day = date('l');
   $time = date('H:i');
-  // echo date("l jS \of F Y h:i");
   $schedules = $query->fetchScheduleForAtt($yearFrom, $yearTo, $sem, $qrcode);
 
   $scheduleMatched = 0;
@@ -468,8 +467,49 @@ if (isset($_POST['action']) && $_POST['action'] == 'attendance') {
     return;
   }
 
+  // Schedule is exact
   if ($scheduleMatched > 0) {
-    echo json_encode($schedTime);
+    $curDate = date("l jS \of F Y");
+    $schedule = $schedTime[0];
+
+    // ex. select all attendance records that has schedule id of 79
+    $attsBasedOnScheduleId = $query->fetchScheduleInAttendance($schedule['sch_id']); 
+
+    // If database found no record of the schedule then log in (1st attendance of semester)
+    if (sizeof($attsBasedOnScheduleId) == 0) {
+      $query->loginAttendance($schedule['sch_id']);
+      echo 3;
+    } 
+    // If database found records of the schedule for logging in or out
+    else {
+      foreach ($attsBasedOnScheduleId as $att) {
+        $in = date('l jS \of F Y', strtotime($att['at_in']));
+        // Find the record with same date of current date
+        if ($in == $curDate) {
+          // if record has a login
+          if ($att['at_in']) {
+            // if record has a login and logout then update logout 
+            if ($att['at_out']) {
+              // Update logout
+              if ($query->logout($att['at_id'])) {
+                echo 'Updated logout!';
+                return;
+              }
+            }
+            // if record has a login but no logout, then fill logout 
+            else {
+              // Logout
+              if ($query->logout($att['at_id'])) {
+                echo 'Logged out!';
+                return;
+              }
+            }
+          }
+        }
+
+
+      }
+    }
     return;
   } else {
     echo $notScheduleNotify;

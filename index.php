@@ -7,7 +7,7 @@
   <title>Faculty Attendance</title>
 </head>
 <body>
-  <h1 class="text-center mt-4">Scan QR CODE</h1>
+  <h1 class="text-center my-5">Scan QR CODE</h1>
 
   <div class="modal" id="loading-modal" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-dialog-centered modal-sm">
@@ -38,7 +38,7 @@
   </div>
 
   <div class="container">
-    <div class="row mt-4">
+    <div class="row" id="scan">
       <div class="col-md-12">
         <video id="preview" class="w-100"></video>
         <!-- <label for="">QR Code value:</label> -->
@@ -54,6 +54,25 @@
         </div> -->
       </div>
     </div>
+
+    <div class="row mt-5 d-none" id="invalid">
+      <div class="col-md-6 mx-auto text-center">
+        <h1 class="text-danger">Invalid</h1>
+        <p class="fs-5">QR Code is not registered.</p>
+      </div>
+    </div>
+
+    <div class="row mt-5 d-none" id="not-sched">
+      <div class="col-md-6 mx-auto text-center">
+        <h1 class="text-danger" id="not-sched-text"></h1>
+      </div>
+    </div>
+    
+    <div class="row mt-5 d-none" id="log-in">
+      <div class="col-md-6 mx-auto text-center">
+        <h1 class="text-success" id="log-in-text"></h1>
+      </div>
+    </div>
   </div>
 
 
@@ -63,6 +82,14 @@
   <script>
     $(document).ready(function() {
       $('#loading-modal').modal('show')
+
+      function swal(icon, title, text) {
+        Swal.fire({
+          icon: icon,
+          title: title,
+          text: text,
+        })
+      }
 
       async function fetchCurrent() {
         let reqCurYearsOrSems = await fetch(`./admin/assets/action.php`, {
@@ -92,7 +119,43 @@
               action: 'attendance'
             },
             success: function(res) {
-              console.log(res)
+              if (res == 'QR Code not registered.') {
+                console.log(res)
+                $('#scan').addClass('d-none')
+                $('#invalid').removeClass('d-none')
+
+                setTimeout(() => {
+                  $("#scan").removeClass('d-none')
+                  $('#invalid').addClass('d-none')
+                }, 2200)
+              } else if (res.includes('Not your schedule')) {
+                console.log(res)
+                $('#scan').addClass('d-none')
+                $('#not-sched').removeClass('d-none')
+                $('#not-sched-text').text(res)
+
+                setTimeout(() => {
+                  $("#scan").removeClass('d-none')
+                  $('#not-sched').addClass('d-none')
+                }, 2200)
+              } else if (res == 3) {
+                console.log(res)
+                $('#scan').addClass('d-none')
+                $('#log-in').removeClass('d-none')
+                $('#log-in-text').text('Logged in!')
+
+                setTimeout(() => {
+                  $("#scan").removeClass('d-none')
+                  $('#log-in').addClass('d-none')
+                }, 2200)
+              } else if (res == 'Updated logout!') {
+                console.log(res)
+              } else if (res == 'Logged out!') {
+                console.log(res)
+              } else {
+                // res = JSON.parse(res)
+                console.log(res)
+              }
               $('#validating-modal').modal('hide')
             }
           })

@@ -495,4 +495,31 @@ class Query extends Database {
     $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
     return $result;
   }
+
+  // Login Attendance
+  public function loginAttendance($sch_id) {
+    $sql = "INSERT INTO attendance (at_sch_id, at_in) VALUES (:sch_id, NOW())";
+    $stmt = $this->conn->prepare($sql);
+    $stmt->execute(['sch_id' => $sch_id]);
+    return true;
+  } 
+
+  // Select schedule id in attendance
+  public function fetchScheduleInAttendance($sch_id) {
+    $sql = "SELECT * FROM attendance WHERE at_sch_id = :sch_id";
+    $stmt = $this->conn->prepare($sql);
+    $stmt->execute(['sch_id' => $sch_id]);
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    return $result;
+  } 
+
+  // Logout
+  public function logout($at_id) {
+    $sql = "UPDATE attendance
+            SET at_out = NOW()
+            WHERE at_id = :at_id";
+    $stmt = $this->conn->prepare($sql);
+    $stmt->execute(['at_id' => $at_id]);
+    return true;
+  } 
 }
