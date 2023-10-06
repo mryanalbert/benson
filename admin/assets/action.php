@@ -371,6 +371,12 @@ if (isset($_POST['action']) && $_POST['action'] == 'edit-sched') {
 // Delete Schedule
 if (isset($_POST['action']) && $_POST['action'] == 'del-sched') {
   $id = $query->testInput($_POST['id']);
+  
+  if ($query->checkIfScheduleExistsInAttendance($id)) {
+    echo 2;
+    return;
+  }
+
   echo $query->delSchedule($id);
 }
 

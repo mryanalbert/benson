@@ -416,6 +416,15 @@ class Query extends Database {
     return $result;
   }
 
+  // Check if schedule exists in attendance
+  public function checkIfScheduleExistsInAttendance($id) {
+    $sql = "SELECT * FROM attendance WHERE at_sch_id = :sch_id";
+    $stmt = $this->conn->prepare($sql);
+    $stmt->execute(['sch_id' => $id]);
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    return $result;
+  }
+
   // Delete a schedule
   public function delSchedule($id) {
     $sql = "DELETE FROM schedule WHERE sch_id = :sch_id";

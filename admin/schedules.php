@@ -674,6 +674,8 @@
               if (res == 1) {
                 fetchSchedules()
                 swal('success', 'Deleted!', '')
+              } else if (res == 2) {
+                swal('error', 'Oops!', 'Schedule data is being used in the attendance record.')
               } else {
                 swal('error', 'Oops!', 'Something went wrong.')
               }
