@@ -482,6 +482,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'attendance') {
     } 
     // If database found records of the schedule for logging in or out
     else {
+      $ins = 0;
       foreach ($attsBasedOnScheduleId as $att) {
         $in = date('l jS \of F Y', strtotime($att['at_in']));
         // Find the record with same date of current date
@@ -505,12 +506,19 @@ if (isset($_POST['action']) && $_POST['action'] == 'attendance') {
               }
             }
           }
+        } 
+        // If record don't have log in schedule that is the same with current date
+        else {
+          $ins++;
         }
+      }
 
-
+      if (sizeof($attsBasedOnScheduleId) == $ins) {
+        $query->loginAttendance($schedule['sch_id']);
+        echo 3;
+        return;
       }
     }
-    return;
   } else {
     echo $notScheduleNotify;
     return;
