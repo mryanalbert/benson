@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 04, 2023 at 03:24 PM
+-- Generation Time: Oct 06, 2023 at 01:53 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -39,6 +39,27 @@ CREATE TABLE `admin` (
 
 INSERT INTO `admin` (`id`, `username`, `password`) VALUES
 (1, 'admin', 'd033e22ae348aeb5660fc2140aec35850c4da997');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `attendance`
+--
+
+CREATE TABLE `attendance` (
+  `at_id` int(11) NOT NULL,
+  `at_sch_id` int(11) NOT NULL,
+  `at_in` timestamp NULL DEFAULT NULL,
+  `at_out` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `attendance`
+--
+
+INSERT INTO `attendance` (`at_id`, `at_sch_id`, `at_in`, `at_out`) VALUES
+(3, 79, '2023-10-06 09:38:57', '2023-10-06 11:18:45'),
+(4, 81, '2023-10-06 11:34:52', '2023-10-06 11:35:19');
 
 -- --------------------------------------------------------
 
@@ -165,7 +186,19 @@ INSERT INTO `schedule` (`sch_id`, `school_year_from`, `school_year_to`, `sem`, `
 (64, 2023, 2024, '1', '13:00', '15:00', 'Saturday', 15, 6, 31),
 (65, 2023, 2024, 'summer', '07:00', '08:00', 'Monday', 15, 4, 29),
 (68, 2023, 2024, '2', '06:00', '06:30', 'Monday', 17, 6, 36),
-(69, 2024, 2025, '1', '05:00', '05:30', 'Sunday', 15, 4, 29);
+(69, 2024, 2025, '1', '05:00', '05:30', 'Sunday', 15, 4, 29),
+(70, 2023, 2024, '2', '21:00', '22:00', 'Thursday', 17, 4, 37),
+(71, 2023, 2024, '2', '20:00', '21:00', 'Tuesday', 15, 6, 37),
+(72, 2023, 2024, '2', '20:00', '21:00', 'Monday', 15, 6, 37),
+(73, 2023, 2024, '2', '19:00', '21:30', 'Sunday', 15, 6, 29),
+(74, 2023, 2024, '2', '21:27', '22:00', 'Monday', 15, 4, 37),
+(75, 2023, 2024, '2', '14:00', '15:00', 'Friday', 15, 6, 37),
+(76, 2023, 2024, '2', '16:00', '17:00', 'Friday', 15, 4, 36),
+(77, 2023, 2024, '2', '15:00', '16:00', 'Friday', 15, 4, 37),
+(78, 2023, 2024, '2', '17:00', '19:30', 'Tuesday', 15, 4, 37),
+(79, 2023, 2024, '2', '17:00', '19:30', 'Friday', 15, 4, 37),
+(80, 2023, 2024, '2', '19:30', '20:30', 'Tuesday', 17, 4, 36),
+(81, 2023, 2024, '2', '19:30', '20:30', 'Friday', 17, 4, 36);
 
 -- --------------------------------------------------------
 
@@ -197,6 +230,12 @@ INSERT INTO `subject` (`sub_id`, `sub_code`, `sub_title`, `sub_desc`) VALUES
 --
 ALTER TABLE `admin`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `attendance`
+--
+ALTER TABLE `attendance`
+  ADD PRIMARY KEY (`at_id`);
 
 --
 -- Indexes for table `current`
@@ -245,6 +284,12 @@ ALTER TABLE `admin`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
+-- AUTO_INCREMENT for table `attendance`
+--
+ALTER TABLE `attendance`
+  MODIFY `at_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
 -- AUTO_INCREMENT for table `current`
 --
 ALTER TABLE `current`
@@ -272,7 +317,7 @@ ALTER TABLE `room`
 -- AUTO_INCREMENT for table `schedule`
 --
 ALTER TABLE `schedule`
-  MODIFY `sch_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=70;
+  MODIFY `sch_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=82;
 
 --
 -- AUTO_INCREMENT for table `subject`
