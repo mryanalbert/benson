@@ -71,6 +71,21 @@
     <div class="row mt-5 d-none" id="log-in">
       <div class="col-md-6 mx-auto text-center">
         <h1 class="text-success" id="log-in-text"></h1>
+        <h3 class="text-secondary" id="log-in-faculty"></h3>
+      </div>
+    </div>
+
+    <div class="row mt-5 d-none" id="log-out">
+      <div class="col-md-6 mx-auto text-center">
+        <h1 class="text-success" id="log-out-text"></h1>
+        <h3 class="text-secondary" id="log-out-faculty"></h3>
+      </div>
+    </div>
+    
+    <div class="row mt-5 d-none" id="log-out-update">
+      <div class="col-md-6 mx-auto text-center">
+        <h1 class="text-success" id="log-out-update-text"></h1>
+        <h3 class="text-secondary" id="log-out-update-faculty"></h3>
       </div>
     </div>
   </div>
@@ -138,23 +153,51 @@
                   $("#scan").removeClass('d-none')
                   $('#not-sched').addClass('d-none')
                 }, 2200)
-              } else if (res == 3) {
-                console.log(res)
-                $('#scan').addClass('d-none')
-                $('#log-in').removeClass('d-none')
-                $('#log-in-text').text('Logged in!')
+              } 
+              // else if (res == 'Updated logout!') {
+              //   console.log(res)
+              // } else if (res == 'Logged out!') {
+              //   console.log(res)
+              // } 
+              else {
+                res = JSON.parse(res)
 
-                setTimeout(() => {
-                  $("#scan").removeClass('d-none')
-                  $('#log-in').addClass('d-none')
-                }, 2200)
-              } else if (res == 'Updated logout!') {
-                console.log(res)
-              } else if (res == 'Logged out!') {
-                console.log(res)
-              } else {
-                // res = JSON.parse(res)
-                console.log(res)
+                let call = 'Sir'
+                if (res.gender == 0) {
+                  call = "Ma'am"
+                }
+
+                if (res.action == 'login') {
+                  $('#scan').addClass('d-none')
+                  $('#log-in').removeClass('d-none')
+                  $('#log-in-text').text('Logged in!')
+                  $('#log-in-faculty').text(`${call} ${res.fac_fname} ${res.fac_lname}`)
+
+                  setTimeout(() => {
+                    $("#scan").removeClass('d-none')
+                    $('#log-in').addClass('d-none')
+                  }, 2200)
+                } else if (res.action == 'logout') {
+                  $('#scan').addClass('d-none')
+                  $('#log-out').removeClass('d-none')
+                  $('#log-out-text').text('Logged out!')
+                  $('#log-out-faculty').text(`${call} ${res.fac_fname} ${res.fac_lname}`)
+
+                  setTimeout(() => {
+                    $("#scan").removeClass('d-none')
+                    $('#log-out').addClass('d-none')
+                  }, 2200)
+                } else {
+                  $('#scan').addClass('d-none')
+                  $('#log-out-update').removeClass('d-none')
+                  $('#log-out-update-text').text('Updated log out time!')
+                  $('#log-out-update-faculty').text(`${call} ${res.fac_fname} ${res.fac_lname}`)
+
+                  setTimeout(() => {
+                    $("#scan").removeClass('d-none')
+                    $('#log-out-update').addClass('d-none')
+                  }, 2200)
+                }
               }
               $('#validating-modal').modal('hide')
             }

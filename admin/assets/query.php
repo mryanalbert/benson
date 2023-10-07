@@ -513,7 +513,7 @@ class Query extends Database {
     return true;
   } 
 
-  // Select schedule id in attendance
+  // Select in attendance based on schedule id
   public function fetchScheduleInAttendance($sch_id) {
     $sql = "SELECT * FROM attendance WHERE at_sch_id = :sch_id";
     $stmt = $this->conn->prepare($sql);

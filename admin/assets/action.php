@@ -426,8 +426,14 @@ if (isset($_POST['action']) && $_POST['action'] == 'updateSchedule') {
     }
   }
 
-  if (sizeof($conflictTimes) > 0) {
+  if (sizeof($conflictTimes) > 1) {
     echo json_encode($conflictTimes);
+  } else if (sizeof($conflictTimes) == 1) {
+    if ($conflictTimes[0]['sch_id'] == $id) {
+      echo $query->updateSchedule($id, $sched_ay, $sched_sem, $sched_days, $start_time, $end_time, $sched_sub, $sched_room, $sched_fac);
+    } else {
+      echo json_encode($conflictTimes);
+    }
   } else {
     echo $query->updateSchedule($id, $sched_ay, $sched_sem, $sched_days, $start_time, $end_time, $sched_sub, $sched_room, $sched_fac);
   } 
@@ -451,24 +457,37 @@ if (isset($_POST['action']) && $_POST['action'] == 'attendance') {
   $qrcode = $_POST['qrcode'];
   $day = date('l');
   $time = date('H:i');
+
+  // Select schedules based on the current school year, semester, and the qrcode scanned
   $schedules = $query->fetchScheduleForAtt($yearFrom, $yearTo, $sem, $qrcode);
 
   $scheduleMatched = 0;
   $schedTime = [];
   $notScheduleNotify = '';
 
+  // If there is a schedule(s) based on the qrcode scanned
   if (sizeof($schedules) > 0) {
     foreach ($schedules as $sched) {
       $prefix = $sched['gender'] == 1 ? 'Sir' : "Ma'am";
-
+      /*
+        If current time of scanning is in the range of schedule time and current day
+        is the same as the schedule day then push in array and increase scheduleMatched variable by 1
+      */ 
       if (strtotime($sched['sch_time_from']) <= strtotime($time) && strtotime($time) <= strtotime($sched['sch_time_to']) && $day == $sched['day']) {
         $scheduleMatched++;
         array_push($schedTime, $sched);
-      } else {
+      } 
+      /*
+        If current time of scanning is not in the range of schedule time or current day
+        is not the same as the schedule day then return Not your schedule
+      */
+      else {
         $notScheduleNotify = "Not your schedule {$prefix} {$sched['fac_fname']}";
       }
     }
-  } else {
+  }
+  // If there is no schedule based on the qrcode scanned
+  else {
     echo 'QR Code not registered.';
     return;
   }
@@ -483,8 +502,13 @@ if (isset($_POST['action']) && $_POST['action'] == 'attendance') {
 
     // If database found no record of the schedule then log in (1st attendance of semester)
     if (sizeof($attsBasedOnScheduleId) == 0) {
-      $query->loginAttendance($schedule['sch_id']);
-      echo 3;
+      if ($query->loginAttendance($schedule['sch_id'])) {
+        $schedule['sch_time_from'] = date('h:ia', strtotime($schedule['sch_time_from']));
+        $schedule['sch_time_to'] = date('h:ia', strtotime($schedule['sch_time_to']));
+        $schedule['action'] = 'login';
+        echo json_encode($schedule);
+        return;
+      }
     } 
     // If database found records of the schedule for logging in or out
     else {
@@ -499,7 +523,10 @@ if (isset($_POST['action']) && $_POST['action'] == 'attendance') {
             if ($att['at_out']) {
               // Update logout
               if ($query->logout($att['at_id'])) {
-                echo 'Updated logout!';
+                $schedule['sch_time_from'] = date('h:ia', strtotime($schedule['sch_time_from']));
+                $schedule['sch_time_to'] = date('h:ia', strtotime($schedule['sch_time_to']));
+                $schedule['action'] = 'logout updated';
+                echo json_encode($schedule);
                 return;
               }
             }
@@ -507,7 +534,10 @@ if (isset($_POST['action']) && $_POST['action'] == 'attendance') {
             else {
               // Logout
               if ($query->logout($att['at_id'])) {
-                echo 'Logged out!';
+                $schedule['sch_time_from'] = date('h:ia', strtotime($schedule['sch_time_from']));
+                $schedule['sch_time_to'] = date('h:ia', strtotime($schedule['sch_time_to']));
+                $schedule['action'] = 'logout';
+                echo json_encode($schedule);
                 return;
               }
             }
@@ -521,7 +551,9 @@ if (isset($_POST['action']) && $_POST['action'] == 'attendance') {
 
       if (sizeof($attsBasedOnScheduleId) == $ins) {
         $query->loginAttendance($schedule['sch_id']);
-        echo 3;
+        $schedule['sch_time_from'] = date('h:ia', strtotime($schedule['sch_time_from']));
+        $schedule['sch_time_to'] = date('h:ia', strtotime($schedule['sch_time_to']));
+        echo json_encode($schedule);
         return;
       }
     }

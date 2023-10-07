@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 06, 2023 at 01:53 PM
+-- Generation Time: Oct 07, 2023 at 12:49 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -59,7 +59,8 @@ CREATE TABLE `attendance` (
 
 INSERT INTO `attendance` (`at_id`, `at_sch_id`, `at_in`, `at_out`) VALUES
 (3, 79, '2023-10-06 09:38:57', '2023-10-06 11:18:45'),
-(4, 81, '2023-10-06 11:34:52', '2023-10-06 11:35:19');
+(4, 81, '2023-10-06 11:34:52', '2023-10-06 11:35:19'),
+(24, 84, '2023-10-07 10:19:25', '2023-10-07 10:45:00');
 
 -- --------------------------------------------------------
 
@@ -198,7 +199,10 @@ INSERT INTO `schedule` (`sch_id`, `school_year_from`, `school_year_to`, `sem`, `
 (78, 2023, 2024, '2', '17:00', '19:30', 'Tuesday', 15, 4, 37),
 (79, 2023, 2024, '2', '17:00', '19:30', 'Friday', 15, 4, 37),
 (80, 2023, 2024, '2', '19:30', '20:30', 'Tuesday', 17, 4, 36),
-(81, 2023, 2024, '2', '19:30', '20:30', 'Friday', 17, 4, 36);
+(81, 2023, 2024, '2', '19:30', '20:30', 'Friday', 17, 4, 36),
+(82, 2023, 2024, '2', '11:00', '12:00', 'Saturday', 15, 4, 36),
+(83, 2023, 2024, '2', '16:30', '19:00', 'Wednesday', 15, 6, 37),
+(84, 2023, 2024, '2', '16:30', '19:00', 'Saturday', 15, 6, 37);
 
 -- --------------------------------------------------------
 
@@ -287,7 +291,7 @@ ALTER TABLE `admin`
 -- AUTO_INCREMENT for table `attendance`
 --
 ALTER TABLE `attendance`
-  MODIFY `at_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `at_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT for table `current`
@@ -317,7 +321,7 @@ ALTER TABLE `room`
 -- AUTO_INCREMENT for table `schedule`
 --
 ALTER TABLE `schedule`
-  MODIFY `sch_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=82;
+  MODIFY `sch_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=85;
 
 --
 -- AUTO_INCREMENT for table `subject`
