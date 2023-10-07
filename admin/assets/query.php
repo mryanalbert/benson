@@ -531,4 +531,29 @@ class Query extends Database {
     $stmt->execute(['at_id' => $at_id]);
     return true;
   } 
+
+  // Fetch Attendance based on School year and semester
+  // Used for fetching Month and faculty based on ac year and sem
+  public function fetchAttBasedAcYearAndSem($ac_year_from, $sem, $dep) {
+    $sql = "SELECT * FROM attendance
+            INNER JOIN schedule
+              ON attendance.at_sch_id = schedule.sch_id
+            INNER JOIN faculty
+              ON schedule.fac_id = faculty.fac_id
+            INNER JOIN department
+              ON faculty.dep_id = department.dep_id
+            WHERE school_year_from = :school_year_from
+              AND school_year_to = :school_year_to
+              AND sem = :sem
+              AND department.dep_id = :dep_id";
+    $stmt = $this->conn->prepare($sql);
+    $stmt->execute([
+      'school_year_from' => $ac_year_from,
+      'school_year_to' => $ac_year_from + 1,
+      'sem' => $sem,
+      'dep_id' => $dep
+    ]);
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    return $result;
+  } 
 }

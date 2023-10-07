@@ -562,3 +562,24 @@ if (isset($_POST['action']) && $_POST['action'] == 'attendance') {
     return;
   }
 }
+
+// 
+if (isset($_POST['action']) && $_POST['action'] == 'fetchAttBasedAcYearAndSem') {
+  $yearFrom = $query->testInput($_POST['yearFrom']);
+  $sem = $query->testInput($_POST['sem']);
+  $dep = $query->testInput($_POST['dep']);
+  $atts = $query->fetchAttBasedAcYearAndSem($yearFrom, $sem, $dep);
+  echo json_encode($atts);
+
+
+  // $months = [];
+  // $faculties = [];
+  // $montsFacs = array();
+
+  // foreach ($atts as $att) {
+  //   $att['at_in'] = date('F', strtotime($att['at_in']));
+  //   array_push($months, $att);
+
+  // }
+  // echo json_encode($months);
+}

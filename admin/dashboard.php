@@ -43,9 +43,9 @@
         fetchCurYearsOrSems('fetchSems'),
         fetchCurYearsOrSems('fetchCurrent')
       ])
-      console.log(years)
-      console.log(sems)
-      console.log(current)
+      // console.log(years)
+      // console.log(sems)
+      // console.log(current)
 
       years = years.map(year => `<option value="${year.school_year_from}">${year.school_year_from}-${year.school_year_from + 1}</option>`)
       years = years.join('')

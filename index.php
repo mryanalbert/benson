@@ -39,7 +39,7 @@
 
   <div class="container">
     <div class="row" id="scan">
-      <div class="col-md-12">
+      <div class="col-md-8 mx-auto">
         <video id="preview" class="w-100"></video>
         <!-- <label for="">QR Code value:</label> -->
         <input type="hidden" name="qrcode" id="qrcode" class="form-control w-100 mt-2" style="width: 200px;">
