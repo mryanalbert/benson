@@ -135,7 +135,7 @@
             },
             success: function(res) {
               if (res == 'QR Code not registered.') {
-                console.log(res)
+                // console.log(res)
                 $('#scan').addClass('d-none')
                 $('#invalid').removeClass('d-none')
 
@@ -144,7 +144,7 @@
                   $('#invalid').addClass('d-none')
                 }, 2200)
               } else if (res.includes('Not your schedule')) {
-                console.log(res)
+                // console.log(res)
                 $('#scan').addClass('d-none')
                 $('#not-sched').removeClass('d-none')
                 $('#not-sched-text').text(res)
@@ -154,11 +154,6 @@
                   $('#not-sched').addClass('d-none')
                 }, 2200)
               } 
-              // else if (res == 'Updated logout!') {
-              //   console.log(res)
-              // } else if (res == 'Logged out!') {
-              //   console.log(res)
-              // } 
               else {
                 res = JSON.parse(res)
 
