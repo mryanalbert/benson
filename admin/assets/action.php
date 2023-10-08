@@ -455,6 +455,8 @@ if (isset($_POST['action']) && $_POST['action'] == 'attendance') {
   $yearTo = $_POST['yearTo'];
   $sem = $_POST['sem'];
   $qrcode = $_POST['qrcode'];
+  $month = date('F');
+  $date = date('j');
   $day = date('l');
   $time = date('H:i');
 
@@ -502,7 +504,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'attendance') {
 
     // If database found no record of the schedule then log in (1st attendance of semester)
     if (sizeof($attsBasedOnScheduleId) == 0) {
-      if ($query->loginAttendance($schedule['sch_id'])) {
+      if ($query->loginAttendance($schedule['sch_id'], $month, $date, $day)) {
         $schedule['sch_time_from'] = date('h:ia', strtotime($schedule['sch_time_from']));
         $schedule['sch_time_to'] = date('h:ia', strtotime($schedule['sch_time_to']));
         $schedule['action'] = 'login';
@@ -550,7 +552,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'attendance') {
       }
 
       if (sizeof($attsBasedOnScheduleId) == $ins) {
-        $query->loginAttendance($schedule['sch_id']);
+        $query->loginAttendance($schedule['sch_id'], $month, $date, $day);
         $schedule['sch_time_from'] = date('h:ia', strtotime($schedule['sch_time_from']));
         $schedule['sch_time_to'] = date('h:ia', strtotime($schedule['sch_time_to']));
         echo json_encode($schedule);
@@ -563,23 +565,52 @@ if (isset($_POST['action']) && $_POST['action'] == 'attendance') {
   }
 }
 
-// 
+// Fetch attendance based on school year and semester
 if (isset($_POST['action']) && $_POST['action'] == 'fetchAttBasedAcYearAndSem') {
   $yearFrom = $query->testInput($_POST['yearFrom']);
   $sem = $query->testInput($_POST['sem']);
   $dep = $query->testInput($_POST['dep']);
   $atts = $query->fetchAttBasedAcYearAndSem($yearFrom, $sem, $dep);
   echo json_encode($atts);
+}
 
+// Fetch Months based on school year and semester
+if (isset($_POST['action']) && $_POST['action'] == 'fetchMonths') {
+  $ac_year_from = $query->testInput($_POST['acyear']);
+  $sem = $query->testInput($_POST['sem']);
+  echo json_encode($query->fetchMonthsBasedAcYearAndSem($ac_year_from, $sem));
+}
 
-  // $months = [];
-  // $faculties = [];
-  // $montsFacs = array();
+// Fetch faculties based on school year, department, and semester
+if (isset($_POST['action']) && $_POST['action'] == 'fetchFacs') {
+  $ac_year_from = $query->testInput($_POST['acyear']);
+  $dep = $query->testInput($_POST['dep']);
+  $sem = $query->testInput($_POST['sem']);
+  echo json_encode($query->fetchFacultiesBasedAcYearSemDep($ac_year_from, $sem, $dep));
+}
 
-  // foreach ($atts as $att) {
-  //   $att['at_in'] = date('F', strtotime($att['at_in']));
-  //   array_push($months, $att);
+// Filter Reports
+if (isset($_POST['action']) && $_POST['action'] == 'filterReports') {
+  $ac_year_from = $query->testInput($_POST['acyear']);
+  $sem = $query->testInput($_POST['sem']);
+  $month = $query->testInput($_POST['month']);
+  $dep = $query->testInput($_POST['dep']);
+  $faculty = $query->testInput($_POST['faculty']);
+  echo json_encode($query->filterReports($ac_year_from, $sem, $month, $dep, $faculty));
+}
 
-  // }
-  // echo json_encode($months);
+if (isset($_POST['action']) && $_POST['action'] == 'fetchMonthsFacsBasedOnAcYearSemDep') {
+  $ac_year_from = $query->testInput($_POST['acyear']);
+  $sem = $query->testInput($_POST['sem']);
+  $dep = $query->testInput($_POST['dep']);
+  
+  $obj = array('months' => [], 'facs' => []);
+
+  $months = $query->fetchMonthsBasedAcYearAndSem($ac_year_from, $sem);
+  $faculties = $query->fetchFacultiesBasedAcYearSemDep($ac_year_from, $sem, $dep);
+
+  $obj['months'] = $months;
+  $obj['facs'] = $faculties;
+
+  echo json_encode($obj);
 }

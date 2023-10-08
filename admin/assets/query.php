@@ -506,10 +506,15 @@ class Query extends Database {
   }
 
   // Login Attendance
-  public function loginAttendance($sch_id) {
-    $sql = "INSERT INTO attendance (at_sch_id, at_in) VALUES (:sch_id, NOW())";
+  public function loginAttendance($sch_id, $month, $date, $day) {
+    $sql = "INSERT INTO attendance (at_sch_id, `month`, `date`, `day`, at_in) VALUES (:sch_id, :month, :date, :day, NOW())";
     $stmt = $this->conn->prepare($sql);
-    $stmt->execute(['sch_id' => $sch_id]);
+    $stmt->execute([
+      'sch_id' => $sch_id,
+      'month' => $month,
+      'date' => $date,
+      'day' => $day
+    ]);
     return true;
   } 
 
@@ -552,6 +557,104 @@ class Query extends Database {
       'school_year_to' => $ac_year_from + 1,
       'sem' => $sem,
       'dep_id' => $dep
+    ]);
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    return $result;
+  } 
+
+  public function fetchMonthsBasedAcYearAndSem($ac_year_from, $sem) {
+    $sql = "SELECT DISTINCT `month` FROM attendance
+            INNER JOIN schedule
+              ON attendance.at_sch_id = schedule.sch_id
+            INNER JOIN faculty
+              ON schedule.fac_id = faculty.fac_id
+            INNER JOIN department
+              ON faculty.dep_id = department.dep_id
+            WHERE school_year_from = :school_year_from
+              AND school_year_to = :school_year_to
+              AND sem = :sem";
+    $stmt = $this->conn->prepare($sql);
+    $stmt->execute([
+      'school_year_from' => $ac_year_from,
+      'school_year_to' => $ac_year_from + 1,
+      'sem' => $sem
+    ]);
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    return $result;
+  } 
+
+  public function fetchFacultiesBasedAcYearSemDep($ac_year_from, $sem, $dep) {
+    $sql = "SELECT faculty.fac_id, fac_fname, fac_lname FROM attendance
+            INNER JOIN schedule
+              ON attendance.at_sch_id = schedule.sch_id
+            INNER JOIN faculty
+              ON schedule.fac_id = faculty.fac_id
+            INNER JOIN department
+              ON faculty.dep_id = department.dep_id
+            WHERE school_year_from = :school_year_from
+              AND school_year_to = :school_year_to
+              AND sem = :sem
+              AND faculty.dep_id = :dep_id";
+    $stmt = $this->conn->prepare($sql);
+    $stmt->execute([
+      'school_year_from' => $ac_year_from,
+      'school_year_to' => $ac_year_from + 1,
+      'sem' => $sem,
+      'dep_id' => $dep
+    ]);
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    return $result;
+  } 
+  
+  public function filterReports($ac_year_from, $sem, $month, $dep, $faculty) {
+    $sql = "SELECT * FROM attendance
+            INNER JOIN schedule
+              ON attendance.at_sch_id = schedule.sch_id
+            INNER JOIN faculty
+              ON schedule.fac_id = faculty.fac_id
+            INNER JOIN department
+              ON faculty.dep_id = department.dep_id
+            WHERE school_year_from = :school_year_from
+              AND school_year_to = :school_year_to
+              AND sem = :sem
+              AND `month` = :month
+              AND department.dep_id = :dep_id
+              AND faculty.fac_id = :fac_id";
+    $stmt = $this->conn->prepare($sql);
+    $stmt->execute([
+      'school_year_from' => $ac_year_from,
+      'school_year_to' => $ac_year_from + 1,
+      'sem' => $sem,
+      'month' => $month,
+      'dep_id' => $dep,
+      'fac_id' => $faculty
+    ]);
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    return $result;
+  } 
+
+  public function fetchSemsBasedOnAcYear($ac_year_from, $sem, $month, $dep, $faculty) {
+    $sql = "SELECT * FROM attendance
+            INNER JOIN schedule
+              ON attendance.at_sch_id = schedule.sch_id
+            INNER JOIN faculty
+              ON schedule.fac_id = faculty.fac_id
+            INNER JOIN department
+              ON faculty.dep_id = department.dep_id
+            WHERE school_year_from = :school_year_from
+              AND school_year_to = :school_year_to
+              AND sem = :sem
+              AND `month` = :month
+              AND department.dep_id = :dep_id
+              AND faculty.fac_id = :fac_id";
+    $stmt = $this->conn->prepare($sql);
+    $stmt->execute([
+      'school_year_from' => $ac_year_from,
+      'school_year_to' => $ac_year_from + 1,
+      'sem' => $sem,
+      'month' => $month,
+      'dep_id' => $dep,
+      'fac_id' => $faculty
     ]);
     $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
     return $result;
