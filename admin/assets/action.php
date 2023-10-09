@@ -596,7 +596,16 @@ if (isset($_POST['action']) && $_POST['action'] == 'filterReports') {
   $month = $query->testInput($_POST['month']);
   $dep = $query->testInput($_POST['dep']);
   $faculty = $query->testInput($_POST['faculty']);
-  echo json_encode($query->filterReports($ac_year_from, $sem, $month, $dep, $faculty));
+  
+  $atts = $query->filterReports($ac_year_from, $sem, $month, $dep, $faculty);
+  $newAtts = [];
+
+  foreach ($atts as $att) {
+    $att['at_in'] = date('h:ia', strtotime($att['at_in']));
+    $att['at_out'] = date('h:ia', strtotime($att['at_out']));
+    array_push($newAtts, $att);
+  }
+  echo json_encode($newAtts);
 }
 
 if (isset($_POST['action']) && $_POST['action'] == 'fetchMonthsFacsBasedOnAcYearSemDep') {
@@ -614,3 +623,20 @@ if (isset($_POST['action']) && $_POST['action'] == 'fetchMonthsFacsBasedOnAcYear
 
   echo json_encode($obj);
 }
+
+if (isset($_POST['action']) && $_POST['action'] == 'fetchFacsBasedAcYearSemDep') {
+  $ac_year_from = $query->testInput($_POST['acyear']);
+  $sem = $query->testInput($_POST['sem']);
+  $dep = $query->testInput($_POST['dep']);
+  echo json_encode($query->fetchFacsBasedAcYearSemDep($ac_year_from, $sem, $dep));
+}
+
+// if (isset($_POST['action']) && $_POST['action'] == 'fetchAtt') {
+//   $ac_year_from = $query->testInput($query->testInput($_POST['acyear']));
+//   $sem = $query->testInput($query->testInput($_POST['sem']));
+//   $month = $query->testInput($query->testInput($_POST['month']));
+//   $dep = $query->testInput($query->testInput($_POST['dep']));
+//   $faculty = $query->testInput($query->testInput($_POST['faculty']));
+
+//   echo json_encode($query->filterReports($ac_year_from, $sem, $month, $dep, $faculty));
+// }
