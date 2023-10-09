@@ -614,6 +614,10 @@ class Query extends Database {
               ON schedule.fac_id = faculty.fac_id
             INNER JOIN department
               ON faculty.dep_id = department.dep_id
+            INNER JOIN room
+              ON schedule.ro_id = room.ro_id
+            INNER JOIN `subject`
+              ON schedule.sub_id = `subject`.sub_id
             WHERE school_year_from = :school_year_from
               AND school_year_to = :school_year_to
               AND sem = :sem
@@ -679,6 +683,26 @@ class Query extends Database {
       'sem' => $sem,
       'dep_id' => $dep
     ]);
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    return $result;
+  } 
+
+  // Fetch Attendance Report
+  public function fetchAttReport($id) {
+    $sql = "SELECT * FROM attendance
+            INNER JOIN schedule
+              ON attendance.at_sch_id = schedule.sch_id
+            INNER JOIN faculty
+              ON schedule.fac_id = faculty.fac_id
+            INNER JOIN department
+              ON faculty.dep_id = department.dep_id
+            INNER JOIN room
+              ON schedule.ro_id = room.ro_id
+            INNER JOIN `subject`
+              ON schedule.sub_id = `subject`.sub_id
+            WHERE at_id = :id";
+    $stmt = $this->conn->prepare($sql);
+    $stmt->execute(['id' => $id]);
     $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
     return $result;
   } 

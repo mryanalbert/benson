@@ -13,6 +13,37 @@
       </div>
     </div>
 
+    <!-- Edit Record Modal -->
+    <div class="modal fade" id="edit-report-modal" data-bs-backdrop="static" data-bs-keyboard="false">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header bg-warning">
+            <h1 class="modal-title fs-5">Edit Record Modal</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-md-12">
+                <h6 class="text-center" id="fac-room"></h6>
+                <h6 class="text-center" id="subj"></h6>
+                <h6 class="text-center" id="sched-time"></h6>
+                <form id="edit-report-form">
+                  <input type="hidden" name="edit-id" id="edit-id">
+                  <label>Time-in:</label>
+                  <input type="time" name="edit-in" id="edit-in" class="form-control mb-3" required>
+                  
+                  <label>Time-out:</label>
+                  <input type="time" name="edit-out" id="edit-out" class="form-control mb-3" required>
+
+                  <input type="submit" value="Update Record" class="btn btn-warning w-100" id="update-record-btn">
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="row">
       <div class="col-12">
         <div class="card rounded-0 shadow-sm">
@@ -171,7 +202,6 @@
         },
         success: function(res) {
           res = JSON.parse(res)
-          console.log(res)
           if (res.length > 0) {
             let output = ''
 
@@ -183,7 +213,7 @@
                     <th>Date</th>
                     <th>Time-in</th>
                     <th>Time-out</th>
-                    <th>Actions</th>
+                    <th>Edit</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -197,14 +227,8 @@
                   <td>${att.at_in}</td>
                   <td>${att.at_out}</td>
                   <td>
-                    <a href="#" title="Details" class="view-report-modal text-decoration-none" id="view-report-${att.at_id}" data-bs-toggle="modal" data-bs-target="#view-report-modal">
-                      <i class="bi bi-info-circle-fill fs-5 text-info"></i>
-                    </a>
                     <a href="#" title="Edit" class="edit-report-modal text-decoration-none" id="edit-report-${att.at_id}" data-bs-toggle="modal" data-bs-target="#edit-report-modal">
                       <i class="bi bi-pencil-square fs-5 text-warning"></i>
-                    </a>
-                    <a href="#" title="Delete" class="del-report-modal" id="del-report-${att.at_id}">
-                      <i class="bi bi-trash-fill fs-5 text-danger"></i>
                     </a>
                   </td>
                 </tr>
@@ -266,8 +290,8 @@
         },
         success: function(res) {
           res = JSON.parse(res)
-          console.log(res)
           if (res.length > 0) {
+            console.log(res)
             let output = ''
 
             output += `
@@ -285,7 +309,7 @@
                     <td>Date</td>
                     <td>Time-in</td>
                     <td>Time-out</td>
-                    <td class="d-none">Actions</td>
+                    <td>Edit</td>
                   </tr>
                 </thead>
                 <tbody>
@@ -299,14 +323,8 @@
                   <td>${att.at_in}</td>
                   <td>${att.at_out}</td>
                   <td>
-                    <a href="#" title="Details" class="view-report-modal text-decoration-none" id="view-report-${att.at_id}" data-bs-toggle="modal" data-bs-target="#view-report-modal">
-                      <i class="bi bi-info-circle-fill fs-5 text-info"></i>
-                    </a>
                     <a href="#" title="Edit" class="edit-report-modal text-decoration-none" id="edit-report-${att.at_id}" data-bs-toggle="modal" data-bs-target="#edit-report-modal">
                       <i class="bi bi-pencil-square fs-5 text-warning"></i>
-                    </a>
-                    <a href="#" title="Delete" class="del-report-modal" id="del-report-${att.at_id}">
-                      <i class="bi bi-trash-fill fs-5 text-danger"></i>
                     </a>
                   </td>
                 </tr>
@@ -407,6 +425,41 @@
           let uniqFacsMapped = uniqFacs.map(fac => `<option value="${fac.fac_id}">${fac.fac_fname} ${fac.fac_lname}</option>`)
           let uniqFacsJoined = uniqFacsMapped.join('')
           $('#faculty-filter').html(uniqFacsJoined)
+        }
+      })
+    })
+
+    $('body').on('click', '.edit-report-modal', function(e) {
+      e.stopPropagation()
+
+      let id = $(this).attr('id')
+      id = id.substr(12)
+
+      $.ajax({
+        url: './assets/action.php',
+        method: 'post',
+        data: { id, action: 'editRecord' },
+        success: function(res) {
+          res = JSON.parse(res)
+          if (res.length > 0) {
+            res = res[0]
+
+            $('#fac-room').text(`Schedule of ${res.gender ? 'Sir' : "Ma'am"} ${res.fac_fname} ${res.fac_lname} in ${res.room}`)
+            $('#subj').text(`${res.sub_title} - ${res.sub_desc} (${res.sub_code})`)
+            $('#sched-time').text(`${res.day} - ${res.sch_time_from_conv}-${res.sch_time_to_conv}`)
+            $('#edit-id').val(res.at_id)
+
+            $('#edit-in').val(res.at_in)
+            $('#edit-in').attr('min', res.sch_time_from)
+            $('#edit-in').attr('max', res.sch_time_to)
+            
+            $('#edit-out').val(res.at_out)
+            $('#edit-out').attr('min', res.sch_time_from)
+            $('#edit-out').attr('max', res.sch_time_to)
+            console.log(res)
+          } else {
+
+          }
         }
       })
     })

@@ -631,12 +631,21 @@ if (isset($_POST['action']) && $_POST['action'] == 'fetchFacsBasedAcYearSemDep')
   echo json_encode($query->fetchFacsBasedAcYearSemDep($ac_year_from, $sem, $dep));
 }
 
-// if (isset($_POST['action']) && $_POST['action'] == 'fetchAtt') {
-//   $ac_year_from = $query->testInput($query->testInput($_POST['acyear']));
-//   $sem = $query->testInput($query->testInput($_POST['sem']));
-//   $month = $query->testInput($query->testInput($_POST['month']));
-//   $dep = $query->testInput($query->testInput($_POST['dep']));
-//   $faculty = $query->testInput($query->testInput($_POST['faculty']));
+// Edit btn
+if (isset($_POST['action']) && $_POST['action'] == 'editRecord') {
+  date_default_timezone_set('Asia/Manila');
+  $id = $query->testInput($_POST['id']);
+  $newAtts = [];
+  $atts = $query->fetchAttReport($id);
 
-//   echo json_encode($query->filterReports($ac_year_from, $sem, $month, $dep, $faculty));
-// }
+  foreach ($atts as $att) {
+    $att['sch_time_from_conv'] = date('h:ia', strtotime($att['sch_time_from']));
+    $att['sch_time_to_conv'] = date('h:ia', strtotime($att['sch_time_to']));
+
+    $att['at_in'] = date('H:i', strtotime($att['at_in']));
+    $att['at_out'] = date('H:i', strtotime($att['at_out']));
+    array_push($newAtts, $att);
+  }
+  echo json_encode($newAtts);
+}
+
