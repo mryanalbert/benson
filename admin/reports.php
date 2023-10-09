@@ -456,10 +456,20 @@
             $('#edit-out').val(res.at_out)
             $('#edit-out').attr('min', res.sch_time_from)
             $('#edit-out').attr('max', res.sch_time_to)
-            console.log(res)
-          } else {
-
           }
+        }
+      })
+    })
+
+    $('#update-record-btn').click(function(e) {
+      e.preventDefault()
+
+      $.ajax({
+        url: './assets/action.php',
+        method: 'post',
+        data: $('#edit-report-form').serialize() + '&action=updateRecord',
+        success: function(res) {
+          console.log(res)
         }
       })
     })

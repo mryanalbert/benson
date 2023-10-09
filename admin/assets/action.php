@@ -649,3 +649,17 @@ if (isset($_POST['action']) && $_POST['action'] == 'editRecord') {
   echo json_encode($newAtts);
 }
 
+if (isset($_POST['action']) && $_POST['action'] == 'updateRecord') {
+  // format for time-in and time-out 2023-10-06 17:38:57
+  date_default_timezone_set('Asia/Manila');
+  // $in = date("Y-m-d H:i:s", strtotime($in));
+  // $out = date("Y-m-d H:i:s", strtotime($out));
+  $id = $query->testInput($_POST['edit-id']);
+  $in = $query->testInput($_POST['edit-in']);
+  $out = $query->testInput($_POST['edit-out']);
+
+  $in = date("Y-m-d H:i:s", strtotime($in));
+  $out = date("Y-m-d H:i:s", strtotime($out));
+  
+  echo $query->updateAttReport($id, $in, $out);
+}

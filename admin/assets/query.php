@@ -706,4 +706,19 @@ class Query extends Database {
     $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
     return $result;
   } 
+
+  // Update Attendance Report
+  public function updateAttReport($id, $in, $out) {
+    $sql = "UPDATE attendance
+            SET at_in = :at_in,
+                at_out = :at_out
+            WHERE at_id = :at_id";
+    $stmt = $this->conn->prepare($sql);
+    $stmt->execute([
+      'at_in' => $in,
+      'at_out' => $out,
+      'at_id' => $id
+    ]);
+    return true;
+  } 
 }
