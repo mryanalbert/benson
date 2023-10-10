@@ -17,7 +17,7 @@ if (!isset($_SESSION["admin_system"])) {
   <link rel="stylesheet" href="./libs/Datatables/DataTables-1.13.6/css/dataTables.bootstrap5.min.css">
   <link rel="stylesheet" href="./libs/Datatables/FixedHeader-3.4.0/css/fixedHeader.bootstrap5.min.css">
   <link rel="stylesheet" href="./libs/multi-select-tag.css">
-  <link rel="stylesheet" href="https://unpkg.com/@jarstone/dselect/dist/css/dselect.css">
+  <!-- <link rel="stylesheet" href="https://unpkg.com/@jarstone/dselect/dist/css/dselect.css"> -->
   <link rel="stylesheet" href="./assets/css/style.css">
   <title>
     <?php

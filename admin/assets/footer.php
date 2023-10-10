@@ -11,4 +11,5 @@
 <script src="./libs/d3/pdfmake-0.2.7/pdfmake.min.js"></script>
 <script src="./libs/d3/pdfmake-0.2.7/vfs_fonts.js"></script>
 <script src="./libs/multi-select-tag.js"></script>
-<script src="https://unpkg.com/@jarstone/dselect/dist/js/dselect.js"></script>
+<script src="./libs/chart.min.js"></script>
+<!-- <script src="https://unpkg.com/@jarstone/dselect/dist/js/dselect.js"></script> -->
