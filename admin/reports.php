@@ -202,6 +202,7 @@
         },
         success: function(res) {
           res = JSON.parse(res)
+          console.log(res)
           if (res.length > 0) {
             let output = ''
 
@@ -213,6 +214,7 @@
                     <th>Date</th>
                     <th>Time-in</th>
                     <th>Time-out</th>
+                    <th>Faculty</th>
                     <th>Edit</th>
                   </tr>
                 </thead>
@@ -226,6 +228,7 @@
                   <td>${att.date}</td>
                   <td>${att.at_in}</td>
                   <td>${att.at_out}</td>
+                  <td>${att.fac_fname} ${att.fac_lname}</td>
                   <td>
                     <a href="#" title="Edit" class="edit-report-modal text-decoration-none" id="edit-report-${att.at_id}" data-bs-toggle="modal" data-bs-target="#edit-report-modal">
                       <i class="bi bi-pencil-square fs-5 text-warning"></i>
@@ -302,6 +305,7 @@
                     <th>Date</th>
                     <th>Time-in</th>
                     <th>Time-out</th>
+                    <th>Faculty</th>
                     <th>Actions</th>
                   </tr>
                   <tr>
@@ -322,6 +326,7 @@
                   <td>${att.date}</td>
                   <td>${att.at_in}</td>
                   <td>${att.at_out}</td>
+                  <td>${att.fac_fname} ${att.fac_lname}</td>
                   <td>
                     <a href="#" title="Edit" class="edit-report-modal text-decoration-none" id="edit-report-${att.at_id}" data-bs-toggle="modal" data-bs-target="#edit-report-modal">
                       <i class="bi bi-pencil-square fs-5 text-warning"></i>
