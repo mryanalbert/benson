@@ -151,15 +151,12 @@
         fetchRooms(),
         fetchSubjects(),
       ])
-      // console.log(years)
-      // console.log(sems)
-      // console.log(current)
+
       let countFacs = faculties.length
       let countDeps = deps.length
       let countRooms = rooms.length
       let countSubjects = subjects.length
       let facsGroupedByDep = Object.groupBy(faculties, ({ dep_name }) => dep_name)
-      console.log(facsGroupedByDep)
 
       let arrDeps = deps.map(dep => dep.dep_name)
       let depsCount = []
@@ -167,7 +164,6 @@
       for (key in facsGroupedByDep) {
         depsCount.push(facsGroupedByDep[key].length)
       }
-      console.log(depsCount)
 
       $('#count-fac').text(`${countFacs} All Faculties`)
       $('#count-dep').text(`${countDeps} Departments`)
