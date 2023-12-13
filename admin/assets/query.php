@@ -1,6 +1,6 @@
 <?php
 
-require_once './db.php';
+require_once 'db.php';
 
 class Query extends Database {
   // Fetch Admin through username
@@ -722,3 +722,4 @@ class Query extends Database {
     return true;
   } 
 }
+?>

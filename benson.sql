@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 09, 2023 at 02:30 PM
+-- Generation Time: Dec 06, 2023 at 07:45 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -66,7 +66,8 @@ INSERT INTO `attendance` (`at_id`, `at_sch_id`, `month`, `date`, `day`, `at_in`,
 (24, 84, 'October', 7, 'Saturday', '2023-10-07 10:19:25', '2023-10-07 11:00:04'),
 (25, 85, 'October', 7, 'Saturday', '2023-10-07 11:00:00', '2023-10-09 11:30:00'),
 (26, 86, 'October', 7, 'Saturday', '2023-10-07 12:48:52', '2023-10-07 12:49:31'),
-(27, 87, 'October', 8, 'Sunday', '2023-10-08 07:07:16', '2023-10-08 07:08:17');
+(27, 87, 'October', 8, 'Sunday', '2023-10-08 07:07:16', '2023-10-08 07:08:17'),
+(28, 88, 'December', 6, 'Wednesday', '2023-12-06 06:44:44', NULL);
 
 -- --------------------------------------------------------
 
@@ -108,7 +109,8 @@ INSERT INTO `department` (`dep_id`, `dep_name`, `dep_desc`) VALUES
 (10, 'CIT', 'College of Information Technology'),
 (11, 'COB', 'College of Business'),
 (14, 'BSTM', 'Bachelor of Science'),
-(15, 'CTE', 'College of Teachers Education');
+(15, 'CTE', 'College of Teachers Education'),
+(16, 'CCJE', 'College of Criminal Justice Education');
 
 -- --------------------------------------------------------
 
@@ -137,7 +139,8 @@ INSERT INTO `faculty` (`fac_id`, `fac_fname`, `fac_mname`, `fac_lname`, `fac_img
 (31, 'Carol', '', 'Villamor', 'tampus.jpg', 11, 0, '', ''),
 (36, 'Fermin', 'Cabug-os', 'Perez', '', 14, 1, '651ce228a3529', '1696391720.png'),
 (37, 'Aries', 'Deqiut', 'Escosura', 'IMG_4785.jpeg', 14, 1, '651d63b8811a1', '1696424888.png'),
-(38, 'Felix', '', 'Eduave', '328435588_1624809381319002_4735278566866853088_n.jpg', 15, 1, '65213888edcc4', '1696675977.png');
+(38, 'Felix', '', 'Eduave', 'IMG_20220830_153409.jpg', 15, 1, '65213888edcc4', '1696675977.png'),
+(39, 'Aldous', '', 'Buo', 'IMG_20220906_145323.jpg', 16, 1, '6526860675699', '1697023494.png');
 
 -- --------------------------------------------------------
 
@@ -214,7 +217,8 @@ INSERT INTO `schedule` (`sch_id`, `school_year_from`, `school_year_to`, `sem`, `
 (84, 2023, 2024, '2', '16:30', '19:00', 'Saturday', 15, 6, 37),
 (85, 2023, 2024, '2', '19:00', '20:30', 'Saturday', 18, 7, 38),
 (86, 2023, 2024, '1', '20:30', '22:00', 'Saturday', 17, 7, 38),
-(87, 2023, 2024, '2', '15:00', '16:30', 'Sunday', 17, 7, 38);
+(87, 2023, 2024, '2', '15:00', '16:30', 'Sunday', 17, 7, 38),
+(88, 2023, 2024, '2', '14:41', '15:41', 'Wednesday', 17, 4, 37);
 
 -- --------------------------------------------------------
 
@@ -304,7 +308,7 @@ ALTER TABLE `admin`
 -- AUTO_INCREMENT for table `attendance`
 --
 ALTER TABLE `attendance`
-  MODIFY `at_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+  MODIFY `at_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- AUTO_INCREMENT for table `current`
@@ -316,13 +320,13 @@ ALTER TABLE `current`
 -- AUTO_INCREMENT for table `department`
 --
 ALTER TABLE `department`
-  MODIFY `dep_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `dep_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `faculty`
 --
 ALTER TABLE `faculty`
-  MODIFY `fac_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
+  MODIFY `fac_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
 
 --
 -- AUTO_INCREMENT for table `room`
@@ -334,7 +338,7 @@ ALTER TABLE `room`
 -- AUTO_INCREMENT for table `schedule`
 --
 ALTER TABLE `schedule`
-  MODIFY `sch_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=88;
+  MODIFY `sch_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=89;
 
 --
 -- AUTO_INCREMENT for table `subject`

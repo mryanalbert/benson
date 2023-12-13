@@ -142,14 +142,14 @@
               <table class="table table-striped table-bordered w-100" id="sub-table">
                 <thead>
                   <tr>
-                    <th>Code</th>
-                    <th>Title</th>
+                    <th>Course Code</th>
+                    <th>Subject</th>
                     <th>Description</th>
                     <th>Actions</th>
                   </tr>
                   <tr>
-                    <td>Code</td>
-                    <td>Title</td>
+                    <td>Course Code</td>
+                    <td>Subject</td>
                     <td>Description</td>
                     <td class="d-none">Actions</td>
                   </tr>

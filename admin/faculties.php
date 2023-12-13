@@ -1,7 +1,7 @@
 <?php require_once './assets/header.php'; ?>
 <main>
   <div class="container-fluid">
-    <button class="float-end btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-faculty-modal">Add faculty</button>
+    <button class="float-end btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-faculty-modal">Add personnel</button>
     <br><br>
 
     <!-- Add Faculty Modal -->
@@ -9,7 +9,7 @@
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header bg-primary text-white">
-            <h1 class="modal-title fs-5">Add faculty</h1>
+            <h1 class="modal-title fs-5">Add personnel</h1>
             <button type="button" class="btn-close bg-light" data-bs-dismiss="modal"></button>
           </div>
           <div class="modal-body">
@@ -48,7 +48,7 @@
                   <img src="./assets/img/avatar man.jpg" alt="image output" id="img-preview" class="ms-auto img-thumbnail img-fluid" style="width:200px;height:200px;object-fit:cover;">
                 </div>
               </div>
-              <input type="submit" value="Add faculty" id="add-faculty-btn" class="btn btn-primary w-100">
+              <input type="submit" value="Add personnel" id="add-faculty-btn" class="btn btn-primary w-100">
             </form>
           </div>
         </div>
@@ -60,7 +60,7 @@
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header bg-info">
-            <h1 class="modal-title fs-5">View faculty info</h1>
+            <h1 class="modal-title fs-5">View personnel info</h1>
             <button type="button" class="btn-close bg-light" data-bs-dismiss="modal"></button>
           </div>
           <div class="modal-body">
@@ -103,7 +103,7 @@
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header bg-warning">
-            <h1 class="modal-title fs-5">Update faculty</h1>
+            <h1 class="modal-title fs-5">Update personnel</h1>
             <button type="button" class="btn-close bg-light" data-bs-dismiss="modal"></button>
           </div>
           <div class="modal-body">
@@ -143,7 +143,7 @@
                   <img src="./assets/img/avatar man.jpg" alt="image output" id="edit-img-preview" class="ms-auto img-thumbnail img-fluid" style="width:200px;height:200px;object-fit:cover;">
                 </div>
               </div>
-              <input type="submit" value="Update faculty" id="edit-faculty-btn" class="btn btn-warning w-100">
+              <input type="submit" value="Update personnel" id="edit-faculty-btn" class="btn btn-warning w-100">
             </form>
           </div>
         </div>
@@ -154,7 +154,7 @@
       <div class="col-12">
         <div class="card rounded-0 shadow-sm">
           <div class="card-header bg-primary rounded-0">
-            <span class="fs-5 text-white">Faculties</span>
+            <span class="fs-5 text-white">Personnel</span>
           </div>
           <div class="card-body rounded-0" id="data-wrapper">
             <div class="d-flex align-items-center justify-content-center">
@@ -193,17 +193,17 @@
               <table class="table table-striped table-bordered w-100" id="faculty-table">
                 <thead>
                   <tr>
+                    <th>Last name</th>
                     <th>First name</th>
                     <th>Middle name</th>
-                    <th>Last name</th>
                     <th>Department</th>
                     <th>Gender</th>
                     <th>Actions</th>
                   </tr>
                   <tr>
+                    <td>Last name</td>
                     <td>First name</td>
                     <td>Middle name</td>
-                    <td>Last name</td>
                     <td>Department</td>
                     <td>Gender</td>
                     <td class="d-none">Actions</td>
@@ -215,9 +215,9 @@
             res.forEach(faculty => {
               output += `
                 <tr>
+                  <td>${faculty.fac_lname}</td>
                   <td>${faculty.fac_fname}</td>
                   <td>${faculty.fac_mname}</td>
-                  <td>${faculty.fac_lname}</td>
                   <td>${faculty.dep_desc} (${faculty.dep_name})</td>
                   <td>${faculty.gender == 1 ? 'Male' : 'Female'}</td>
                   <td>
@@ -230,7 +230,7 @@
                     <a href="#" title="Delete" class="del-faculty-modal text-decoration-none" id="del-faculty-${faculty.fac_id}">
                       <i class="bi bi-trash-fill fs-5 text-danger"></i>
                     </a>
-                    <a href="#" title="Print QR Code" class="print-qr-faculty text-decoration-none" id="print-qr-faculty-${faculty.fac_id}">
+                    <a href="printqrcode.php?fac_id=${faculty.fac_id}" target="_blank" title="Print QR Code" class="print-qr-faculty text-decoration-none" id="print-qr-faculty-${faculty.fac_id}">
                       <i class="bi bi-printer-fill fs-5"></i>
                     </a>
                   </td>

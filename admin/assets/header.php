@@ -45,7 +45,7 @@ if (!isset($_SESSION["admin_system"])) {
         <button type="button" class="navbar-toggler" data-bs-toggle="offcanvas" data-bs-target="#offcanvas">
           <span class="navbar-toggler-icon"></span>
         </button>
-        <a class="navbar-brand mx-auto" href="#">Attendance Monitoring System</a>
+        <div class="navbar-brand mx-auto" href="#">SIIT Faculty Monitoring System</div>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -76,7 +76,7 @@ if (!isset($_SESSION["admin_system"])) {
           <ul class="navbar-nav">
             <li>
               <a href="faculties.php" class="nav-link text-white px-3 py-3 sidebar-link <?= basename($_SERVER['PHP_SELF']) == 'partylists.php' ? 'bg-success' : ''?>">
-                <i class="bi bi-people"></i> &nbsp;Faculties
+                <i class="bi bi-people"></i> &nbsp;Personnel
               </a>
             </li>
             <li>
